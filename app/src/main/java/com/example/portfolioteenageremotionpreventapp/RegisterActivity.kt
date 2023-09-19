@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -33,9 +34,14 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
         setContentView(binding.root)
 
         val actionBar: ActionBar? = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-        }
+
+        actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        actionBar?.setCustomView(R.layout.actionbar_register)
+
+        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarRegister)
+        actionBarTitle?.text = "회원 가입"
+
+        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         val genders = arrayOf("남", "여")
         val spinner = findViewById<Spinner>(R.id.spinner_gender)

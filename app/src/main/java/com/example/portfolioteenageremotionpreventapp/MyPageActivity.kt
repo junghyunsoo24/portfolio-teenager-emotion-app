@@ -3,6 +3,7 @@ package com.example.portfolioteenageremotionpreventapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,9 +20,14 @@ class MyPageActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val actionBar: ActionBar? = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-        }
+
+        actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        actionBar?.setCustomView(R.layout.actionbar_mypage)
+
+        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarMyPage)
+        actionBarTitle?.text = "마이 페이지"
+
+        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewModel = AppViewModel.getInstance()
 

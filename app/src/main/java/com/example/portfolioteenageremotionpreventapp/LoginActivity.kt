@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -29,9 +30,14 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val actionBar: ActionBar? = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-        }
+
+        actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        actionBar?.setCustomView(R.layout.actionbar_login)
+
+        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarLogin)
+        actionBarTitle?.text = "로그인"
+
+        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         val login: Button = findViewById(R.id.login_btn)
         val join: Button = findViewById(R.id.join_btn)

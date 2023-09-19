@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -67,9 +68,14 @@ class ChatBotActivity : AppCompatActivity() {
         }
 
         val actionBar: ActionBar? = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-        }
+
+        actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        actionBar?.setCustomView(R.layout.actionbar_chatbot)
+
+        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarChatBot)
+        actionBarTitle?.text = "AI 챗봇"
+
+        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         loadChatHistory()
     }
