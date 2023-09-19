@@ -1,0 +1,157 @@
+package com.example.portfolioteenageremotionpreventapp
+
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.portfolioteenageremotionpreventapp.adapter.ChatBotAdapter
+import com.example.portfolioteenageremotionpreventapp.appViewModel.AppViewModel
+import com.example.portfolioteenageremotionpreventapp.chatbot.ChatBotApi
+import com.example.portfolioteenageremotionpreventapp.chatbot.ChatBotData
+import com.example.portfolioteenageremotionpreventapp.chatbot.ChatBotDataPair
+import com.example.portfolioteenageremotionpreventapp.databinding.ActivityChatbotBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.launch
+
+class ChatBotActivity : AppCompatActivity() {
+    private lateinit var input: String
+    private lateinit var id: String
+
+    private lateinit var adapter: ChatBotAdapter
+    private val messages = mutableListOf<ChatBotDataPair>()
+    private lateinit var binding: ActivityChatbotBinding
+
+    private lateinit var viewModel: AppViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityChatbotBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        viewModel = AppViewModel.getInstance()
+
+        id = viewModel.getUserId().value.toString()
+
+        adapter = ChatBotAdapter(messages)
+        binding.chatBotRecyclerView.adapter = adapter
+        binding.chatBotRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        binding.input.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                input = binding.input.text.toString()
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
+                if (input.isNotBlank()) {
+                    mobileToServer()
+
+                    binding.input.text = null
+                }
+                true
+            } else {
+                false
+            }
+
+        }
+
+        val actionBar: ActionBar? = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+        }
+
+        loadChatHistory() // 저장된 채팅 기록 불러오기
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.myPage_btn -> {
+                val intent = Intent(this, MyPageActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun mobileToServer() {
+        lifecycleScope.launch {
+            try {
+                val message = ChatBotData(id, input)
+
+                val response = ChatBotApi.retrofitService.sendMessage(message)
+
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        val responseData = responseBody.bot
+
+                        val chatBotDataPair = ChatBotDataPair(input, responseData)
+                        messages.add(chatBotDataPair)
+
+                        adapter.notifyDataSetChanged()
+                        scrollToBottom()
+
+                        saveChatHistory() // 채팅 기록 저장
+                    } else {
+                        Log.e("@@@@Error3", "Response body is null")
+                    }
+                } else {
+                    Log.e("@@@@Error2", "Response not successful: ${response.code()}")
+                }
+            } catch (Ex: Exception) {
+                Log.e("@@@@Error1", Ex.stackTraceToString())
+            }
+        }
+    }
+
+    private fun scrollToBottom() {
+        binding.chatBotRecyclerView.post {
+            binding.chatBotRecyclerView.smoothScrollToPosition(adapter.itemCount - 1)
+        }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val imm: InputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        return super.dispatchTouchEvent(ev)
+    }
+
+    private val sharedPreferencesKey = "chat_history"
+
+    private fun loadChatHistory() {
+        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        val chatHistoryJson = sharedPreferences.getString(id, "")
+
+        if (!chatHistoryJson.isNullOrEmpty()) {
+            val chatHistory = Gson().fromJson<List<ChatBotDataPair>>(chatHistoryJson, object : TypeToken<List<ChatBotDataPair>>() {}.type)
+            messages.addAll(chatHistory)
+            adapter.notifyDataSetChanged()
+            scrollToBottom()
+        }
+    }
+
+    private fun saveChatHistory() {
+        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        val chatHistoryJson = Gson().toJson(messages)
+        editor.putString(id, chatHistoryJson)
+        editor.apply()
+    }
+}
