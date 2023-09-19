@@ -1,8 +1,8 @@
 package com.example.portfolioteenageremotionpreventapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +11,7 @@ import com.example.portfolioteenageremotionpreventapp.databinding.ActivityMypage
 
 class MyPageActivity : AppCompatActivity() {
     private lateinit var viewModel: AppViewModel
+    private val sharedPreferencesKey = "chat_history"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -26,10 +27,8 @@ class MyPageActivity : AppCompatActivity() {
 
         binding.memberId.text = "아이디: " + viewModel.getUserId().value
 
-        viewModel.getUserId().value?.let { Log.e("mypage", it) }
-        //Log.e("recycler", viewModel.getMessageList().value.toString())
-
         binding.logoutBtn.setOnClickListener {
+            clearChatHistory()
             val builder = AlertDialog.Builder(this)
             builder.setTitle("로그아웃")
             builder.setMessage("로그아웃 완료")
@@ -45,5 +44,13 @@ class MyPageActivity : AppCompatActivity() {
     fun onLogoutButtonClicked(){
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun clearChatHistory() {
+        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        editor.remove(viewModel.getUserId().value)
+        editor.apply()
     }
 }

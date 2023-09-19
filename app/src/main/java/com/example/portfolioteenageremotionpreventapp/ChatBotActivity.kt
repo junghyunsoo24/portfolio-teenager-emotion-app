@@ -33,6 +33,8 @@ class ChatBotActivity : AppCompatActivity() {
 
     private lateinit var viewModel: AppViewModel
 
+    private val sharedPreferencesKey = "chat_history"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -69,7 +71,7 @@ class ChatBotActivity : AppCompatActivity() {
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
 
-        loadChatHistory() // 저장된 채팅 기록 불러오기
+        loadChatHistory()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -106,7 +108,7 @@ class ChatBotActivity : AppCompatActivity() {
                         adapter.notifyDataSetChanged()
                         scrollToBottom()
 
-                        saveChatHistory() // 채팅 기록 저장
+                        saveChatHistory()
                     } else {
                         Log.e("@@@@Error3", "Response body is null")
                     }
@@ -131,8 +133,6 @@ class ChatBotActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         return super.dispatchTouchEvent(ev)
     }
-
-    private val sharedPreferencesKey = "chat_history"
 
     private fun loadChatHistory() {
         val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)

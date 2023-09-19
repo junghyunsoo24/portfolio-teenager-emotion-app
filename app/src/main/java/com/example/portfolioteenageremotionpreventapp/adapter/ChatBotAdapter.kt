@@ -12,7 +12,8 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) :
     RecyclerView.Adapter<ChatBotAdapter.MessageViewHolder>() {
 
     class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val messageItemTextView: TextView = itemView.findViewById(R.id.chatBotTextView)
+        val inputMessageTextView: TextView = itemView.findViewById(R.id.inputMessageTextView)
+        val responseMessageTextView: TextView = itemView.findViewById(R.id.responseMessageTextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
@@ -23,9 +24,12 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) :
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val messagePair = chatBotData[position]
-        val messageInfo = "입력: ${messagePair.inputMessage}\n응답: ${messagePair.responseMessage}\n"
-        holder.messageItemTextView.text = messageInfo
 
+        holder.inputMessageTextView.text = messagePair.inputMessage
+        holder.inputMessageTextView.textSize = 25f
+
+        holder.responseMessageTextView.text = messagePair.responseMessage
+        holder.responseMessageTextView.textSize = 25f
     }
 
     override fun getItemCount(): Int = chatBotData.size
