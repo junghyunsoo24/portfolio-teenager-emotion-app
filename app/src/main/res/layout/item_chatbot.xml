@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -9,30 +9,32 @@
         android:id="@+id/inputMessageTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/chatbot_input"
+        android:gravity="start"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="8dp"
         android:paddingBottom="8dp"
-        android:gravity="start"
         android:text="입력 메시지"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/responseMessageTextView"
-        app:layout_constraintWidth_default="percent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.5" />
 
     <TextView
         android:id="@+id/responseMessageTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/chatbot_output"
         android:gravity="end"
         android:paddingStart="8dp"
         android:paddingTop="8dp"
-        android:paddingEnd="16dp"
+        android:paddingEnd="8dp"
         android:paddingBottom="8dp"
         android:text="응답 메시지"
-        app:layout_constraintTop_toBottomOf="@+id/inputMessageTextView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/inputMessageTextView"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/inputMessageTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
