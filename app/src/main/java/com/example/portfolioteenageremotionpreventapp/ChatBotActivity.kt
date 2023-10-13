@@ -70,9 +70,9 @@ class ChatBotActivity : AppCompatActivity() {
         val actionBar: ActionBar? = supportActionBar
 
         actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        actionBar?.setCustomView(R.layout.actionbar_chatbot)
+        actionBar?.setCustomView(R.layout.actionbar_all)
 
-        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarChatBot)
+        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarAll)
         actionBarTitle?.text = "AI 챗봇"
 
         actionBar?.setDisplayHomeAsUpEnabled(true)

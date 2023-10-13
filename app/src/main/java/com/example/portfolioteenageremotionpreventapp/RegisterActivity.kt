@@ -36,9 +36,9 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
         val actionBar: ActionBar? = supportActionBar
 
         actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        actionBar?.setCustomView(R.layout.actionbar_register)
+        actionBar?.setCustomView(R.layout.actionbar_all)
 
-        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarRegister)
+        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarAll)
         actionBarTitle?.text = "회원 가입"
 
         actionBar?.setDisplayHomeAsUpEnabled(true)

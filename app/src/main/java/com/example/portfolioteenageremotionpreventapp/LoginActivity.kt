@@ -32,9 +32,9 @@ class LoginActivity : AppCompatActivity() {
         val actionBar: ActionBar? = supportActionBar
 
         actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        actionBar?.setCustomView(R.layout.actionbar_login)
+        actionBar?.setCustomView(R.layout.actionbar_all)
 
-        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarLogin)
+        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarAll)
         actionBarTitle?.text = "로그인"
 
         actionBar?.setDisplayHomeAsUpEnabled(true)

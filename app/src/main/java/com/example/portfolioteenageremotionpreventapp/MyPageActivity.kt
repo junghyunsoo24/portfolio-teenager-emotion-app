@@ -22,9 +22,9 @@ class MyPageActivity : AppCompatActivity() {
         val actionBar: ActionBar? = supportActionBar
 
         actionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        actionBar?.setCustomView(R.layout.actionbar_mypage)
+        actionBar?.setCustomView(R.layout.actionbar_all)
 
-        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarMyPage)
+        val actionBarTitle = actionBar?.customView?.findViewById<TextView>(R.id.actionBarAll)
         actionBarTitle?.text = "마이 페이지"
 
         actionBar?.setDisplayHomeAsUpEnabled(true)
