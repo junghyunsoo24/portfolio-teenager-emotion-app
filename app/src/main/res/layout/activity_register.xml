@@ -52,7 +52,7 @@
 
             <EditText
                 android:id="@+id/first_pwd_input"
-                android:layout_width="240dp"
+                android:layout_width="279dp"
                 android:layout_height="60dp"
                 android:ems="10"
                 android:gravity="center"
@@ -151,7 +151,7 @@
 
             <EditText
                 android:id="@+id/phone_input"
-                android:layout_width="240dp"
+                android:layout_width="311dp"
                 android:layout_height="60dp"
                 android:ems="10"
                 android:gravity="center"
