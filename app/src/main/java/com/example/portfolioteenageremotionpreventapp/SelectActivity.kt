@@ -27,6 +27,10 @@ class SelectActivity : AppCompatActivity() {
         binding.ChatBotBtn.setOnClickListener {
             onAIButtonClicked()
         }
+
+        binding.ExpertBtn.setOnClickListener {
+            onExpertButtonClicked()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -47,6 +51,11 @@ class SelectActivity : AppCompatActivity() {
 
     fun onAIButtonClicked(){
         val intent = Intent(this, ChatBotActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun onExpertButtonClicked(){
+        val intent = Intent(this, ExpertChatActivity::class.java)
         startActivity(intent)
     }
 }

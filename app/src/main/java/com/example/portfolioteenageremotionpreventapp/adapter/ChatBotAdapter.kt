@@ -12,8 +12,8 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) :
     RecyclerView.Adapter<ChatBotAdapter.MessageViewHolder>() {
 
     class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val inputMessageTextView: TextView = itemView.findViewById(R.id.inputMessageTextView)
-        val responseMessageTextView: TextView = itemView.findViewById(R.id.responseMessageTextView)
+        val inputMessageTextView: TextView = itemView.findViewById(R.id.inputChatTextView)
+        val responseMessageTextView: TextView = itemView.findViewById(R.id.responseChatTextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
