@@ -37,12 +37,6 @@
             android:parentActivityName=".LoginActivity" />
 
         <activity
-            android:name=".ChatBotActivity"
-            android:exported="false"
-            android:parentActivityName=".SelectActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
-
-        <activity
             android:name=".MyPageActivity"
             android:parentActivityName=".ChatBotActivity">
             <meta-data
@@ -54,6 +48,18 @@
             android:name=".SelectActivity"
             android:exported="false"
             android:parentActivityName=".LoginActivity" />
+
+        <activity
+            android:name=".ChatBotActivity"
+            android:exported="false"
+            android:parentActivityName=".SelectActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+        <activity
+            android:name=".ExpertChatActivity"
+            android:exported="false"
+            android:parentActivityName=".SelectActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
 
     </application>
 

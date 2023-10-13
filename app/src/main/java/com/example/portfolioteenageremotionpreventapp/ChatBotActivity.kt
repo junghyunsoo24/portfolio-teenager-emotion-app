@@ -101,25 +101,27 @@ class ChatBotActivity : AppCompatActivity() {
             try {
                 val message = ChatBotData(id, input)
 
-                val response = ChatBotApi.retrofitService.sendMessage(message)
+                val response = viewModel.getUrl().value?.let { ChatBotApi.retrofitService(it).sendMessage(message) }
 
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        val responseData = responseBody.bot
+                if (response != null) {
+                    if (response.isSuccessful) {
+                        val responseBody = response?.body()
+                        if (responseBody != null) {
+                            val responseData = responseBody.bot
 
-                        val chatBotDataPair = ChatBotDataPair(input, responseData)
-                        messages.add(chatBotDataPair)
+                            val chatBotDataPair = ChatBotDataPair(input, responseData)
+                            messages.add(chatBotDataPair)
 
-                        adapter.notifyDataSetChanged()
-                        scrollToBottom()
+                            adapter.notifyDataSetChanged()
+                            scrollToBottom()
 
-                        saveChatHistory()
+                            saveChatHistory()
+                        } else {
+                            Log.e("@@@@Error3", "Response body is null")
+                        }
                     } else {
-                        Log.e("@@@@Error3", "Response body is null")
+                        Log.e("@@@@Error2", "Response not successful: ${response.code()}")
                     }
-                } else {
-                    Log.e("@@@@Error2", "Response not successful: ${response.code()}")
                 }
             } catch (Ex: Exception) {
                 Log.e("@@@@Error1", Ex.stackTraceToString())

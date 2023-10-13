@@ -12,6 +12,8 @@ class AppViewModel private constructor() : ViewModel() {
 
     private val messageListLiveData = MutableLiveData<List<String>>()
 
+    private val urlLiveData = MutableLiveData<String>()
+
     fun setJwtToken(token: String) {
         jwtTokenLiveData.value = token
     }
@@ -34,6 +36,14 @@ class AppViewModel private constructor() : ViewModel() {
 
     fun getUserPwd(): LiveData<String> {
         return userPwdLiveData
+    }
+
+    fun setUrl(url: String) {
+        urlLiveData.value = url
+    }
+
+    fun getUrl(): LiveData<String> {
+        return urlLiveData
     }
 
     fun setMessageList(messages: List<String>) {

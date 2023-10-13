@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
         login.setOnClickListener {
             id = binding.idInput.text.toString()
             pw = binding.pwdInput.text.toString()
-
+            viewModel.setUrl(resources.getString(R.string.api_ip_server))
             mobileToServer()
         }
 
@@ -89,20 +89,22 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val message = LoginData(id, pw)
-                val response = LoginApi.retrofitService.sendsMessage(message)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        val responseData = responseBody.result
-                        showAlertDialog(responseData)
+                val response = viewModel.getUrl().value?.let { LoginApi.retrofitService(it).sendsMessage(message) }
+                if (response != null) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            val responseData = responseBody.result
+                            showAlertDialog(responseData)
 
-                        viewModel.setUserId(id)
-                        viewModel.setUserPwd(pw)
+                            viewModel.setUserId(id)
+                            viewModel.setUserPwd(pw)
+                        } else {
+                            Log.e("@@@@Error3", "Response body is null")
+                        }
                     } else {
-                        Log.e("@@@@Error3", "Response body is null")
+                        Log.e("@@@@Error2", "Response not successful: ${response.code()}")
                     }
-                } else {
-                    Log.e("@@@@Error2", "Response not successful: ${response.code()}")
                 }
             } catch (Ex: Exception) {
                 Log.e("@@@@Error1", Ex.stackTraceToString())

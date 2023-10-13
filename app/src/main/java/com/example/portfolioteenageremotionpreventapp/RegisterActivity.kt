@@ -11,12 +11,15 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.portfolioteenageremotionpreventapp.appViewModel.AppViewModel
 import com.example.portfolioteenageremotionpreventapp.databinding.ActivityRegisterBinding
 import com.example.portfolioteenageremotionpreventapp.register.RegisterApi
 import com.example.portfolioteenageremotionpreventapp.register.RegisterData
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+    private lateinit var viewModel: AppViewModel
+
     private lateinit var id: String
     private lateinit var pw: String
     private lateinit var name: String
@@ -42,6 +45,8 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
         actionBarTitle?.text = "회원 가입"
 
         actionBar?.setDisplayHomeAsUpEnabled(true)
+
+        viewModel = AppViewModel.getInstance()
 
         val genders = arrayOf("남", "여")
         val spinner = findViewById<Spinner>(R.id.spinner_gender)
@@ -100,20 +105,22 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
         lifecycleScope.launch {
             try {
                 val message = RegisterData(id, pw, name, age, address, genderValue, phone_num)
-                val response = RegisterApi.retrofitService.sendsMessage(message)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        // 서버 응답을 확인하는 작업 수행
-                        val responseData = responseBody.result
+                val response = viewModel.getUrl().value?.let { RegisterApi.retrofitService(it).sendsMessage(message) }
+                if (response != null) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            // 서버 응답을 확인하는 작업 수행
+                            val responseData = responseBody.result
 
-                        showAlertDialog(responseData)
+                            showAlertDialog(responseData)
 
+                        } else {
+                            Log.e("@@@@Error3", "Response body is null")
+                        }
                     } else {
-                        Log.e("@@@@Error3", "Response body is null")
+                        Log.e("@@@@Error2", "Response not successful: ${response.code()}")
                     }
-                } else {
-                    Log.e("@@@@Error2", "Response not successful: ${response.code()}")
                 }
             } catch (Ex: Exception) {
                 Log.e("@@@@Error1", Ex.stackTraceToString())
