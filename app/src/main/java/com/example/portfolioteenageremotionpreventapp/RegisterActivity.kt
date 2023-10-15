@@ -83,7 +83,7 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
     }
 
-    fun onRegistButtonClicked() {
+    private fun onRegisterButtonClicked() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
@@ -95,7 +95,7 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
         builder.setPositiveButton("확인") { dialog, _ ->
             dialog.dismiss()
-            onRegistButtonClicked()
+            onRegisterButtonClicked()
         }
 
         builder.show()

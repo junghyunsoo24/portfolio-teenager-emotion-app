@@ -75,12 +75,12 @@ class LoginActivity : AppCompatActivity() {
         builder.show()
     }
 
-    fun onLoginButtonClicked() {
+    private fun onLoginButtonClicked() {
         val intent: Intent = Intent(this, SelectActivity::class.java)
         startActivity(intent)
     }
 
-    fun onJoinButtonClicked() {
+    private fun onJoinButtonClicked() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
     }

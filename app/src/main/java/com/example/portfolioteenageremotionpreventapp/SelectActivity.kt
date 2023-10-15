@@ -49,12 +49,12 @@ class SelectActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun onAIButtonClicked(){
+    private fun onAIButtonClicked(){
         val intent = Intent(this, ChatBotActivity::class.java)
         startActivity(intent)
     }
 
-    fun onExpertButtonClicked(){
+    private fun onExpertButtonClicked(){
         val intent = Intent(this, ExpertChatActivity::class.java)
         startActivity(intent)
     }

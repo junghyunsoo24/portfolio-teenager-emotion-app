@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun onStartButtonClicked() {
+    private fun onStartButtonClicked() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }

@@ -48,7 +48,7 @@ class MyPageActivity : AppCompatActivity() {
         }
     }
 
-    fun onLogoutButtonClicked(){
+    private fun onLogoutButtonClicked(){
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
