@@ -162,12 +162,4 @@ class ChatBotActivity : AppCompatActivity() {
         editor.putString(id, chatHistoryJson)
         editor.apply()
     }
-
-    private fun clearChatHistory() {
-        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-
-        editor.remove(id)
-        editor.apply()
-    }
 }
