@@ -34,7 +34,7 @@ class ChatBotActivity : AppCompatActivity() {
 
     private lateinit var viewModel: AppViewModel
 
-    private val sharedPreferencesKey = "chat_history"
+    private val chatBotKey = "chatBot_history"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,8 +143,8 @@ class ChatBotActivity : AppCompatActivity() {
     }
 
     private fun loadChatHistory() {
-        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
-        val chatHistoryJson = sharedPreferences.getString(id, "")
+        val chatBot = getSharedPreferences(chatBotKey, Context.MODE_PRIVATE)
+        val chatHistoryJson = chatBot.getString(id, "")
 
         if (!chatHistoryJson.isNullOrEmpty()) {
             val chatHistory = Gson().fromJson<List<ChatBotDataPair>>(chatHistoryJson, object : TypeToken<List<ChatBotDataPair>>() {}.type)
@@ -155,8 +155,8 @@ class ChatBotActivity : AppCompatActivity() {
     }
 
     private fun saveChatHistory() {
-        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        val chatBot = getSharedPreferences(chatBotKey, Context.MODE_PRIVATE)
+        val editor = chatBot.edit()
 
         val chatHistoryJson = Gson().toJson(messages)
         editor.putString(id, chatHistoryJson)

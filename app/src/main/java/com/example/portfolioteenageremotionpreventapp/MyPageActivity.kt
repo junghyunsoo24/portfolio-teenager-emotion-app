@@ -12,8 +12,8 @@ import com.example.portfolioteenageremotionpreventapp.databinding.ActivityMypage
 
 class MyPageActivity : AppCompatActivity() {
     private lateinit var viewModel: AppViewModel
-    private val sharedPreferencesKey = "chat_history"
-    private val sharedPreferencesKey2 = "expert_history"
+    private val chatBotKey = "chat_history"
+    private val expertKey = "expert_history"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,16 +54,16 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     private fun clearChatHistory() {
-        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        val chatBot = getSharedPreferences(chatBotKey, Context.MODE_PRIVATE)
+        val chatBotEditor = chatBot.edit()
 
-        val sharedPreferences2 = getSharedPreferences(sharedPreferencesKey2, Context.MODE_PRIVATE)
-        val editor2 = sharedPreferences2.edit()
+        val expert = getSharedPreferences(expertKey, Context.MODE_PRIVATE)
+        val expertEditor = expert.edit()
 
-        editor.remove(viewModel.getUserId().value)
-        editor.apply()
+        chatBotEditor.remove(viewModel.getUserId().value)
+        chatBotEditor.apply()
 
-        editor2.remove(viewModel.getUserId().value)
-        editor2.apply()
+        expertEditor.remove(viewModel.getUserId().value)
+        expertEditor.apply()
     }
 }

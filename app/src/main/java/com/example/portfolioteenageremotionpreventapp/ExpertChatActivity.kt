@@ -34,7 +34,7 @@ class ExpertChatActivity : AppCompatActivity() {
 
     private lateinit var viewModel: AppViewModel
 
-    private val sharedPreferencesKey = "expert_history"
+    private val expertKey = "expert_history"
 
     private lateinit var mSocket: Socket
 
@@ -171,8 +171,8 @@ class ExpertChatActivity : AppCompatActivity() {
     }
 
     private fun loadChatHistory() {
-        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
-        val chatHistoryJson = sharedPreferences.getString(id, "")
+        val expert = getSharedPreferences(expertKey, Context.MODE_PRIVATE)
+        val chatHistoryJson = expert.getString(id, "")
 
         if (!chatHistoryJson.isNullOrEmpty()) {
             val chatHistory = Gson().fromJson<List<ExpertChatDataPair>>(chatHistoryJson, object : TypeToken<List<ExpertChatDataPair>>() {}.type)
@@ -183,19 +183,11 @@ class ExpertChatActivity : AppCompatActivity() {
     }
 
     private fun saveExpertChatHistory() {
-        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        val expert = getSharedPreferences(expertKey, Context.MODE_PRIVATE)
+        val editor = expert.edit()
 
         val chatHistoryJson = Gson().toJson(messages)
         editor.putString(id, chatHistoryJson)
-        editor.apply()
-    }
-
-    private fun clearChatHistory() {
-        val sharedPreferences = getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-
-        editor.remove(id)
         editor.apply()
     }
 
