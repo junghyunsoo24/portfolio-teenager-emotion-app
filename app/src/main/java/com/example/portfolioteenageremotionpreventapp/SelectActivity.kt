@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.portfolioteenageremotionpreventapp.appViewModel.AppViewModel
 import com.example.portfolioteenageremotionpreventapp.databinding.ActivitySelectBinding
@@ -14,10 +13,7 @@ class SelectActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val actionBar: ActionBar? = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val binding = ActivitySelectBinding.inflate(layoutInflater)
         setContentView(binding.root)
