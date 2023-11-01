@@ -13,7 +13,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="4dp"
         android:gravity="center"
-        android:text="2023년 9월 20일 수요일"
+        android:text="2023년 11월 2일 목요일"
         android:textColor="#000000"
         android:textSize="15sp"
         android:textStyle="bold"

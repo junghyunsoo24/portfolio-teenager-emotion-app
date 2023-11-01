@@ -3,6 +3,7 @@ package com.example.portfolioteenageremotionpreventapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -59,7 +60,7 @@ class ExpertChatActivity : AppCompatActivity() {
             mSocket.connect()
 
             val roomName = id
-
+            Log.e("test", roomName)
             //(1)입장
             val data = JoinData(id, roomName)
             val jsonObject = JSONObject()
@@ -68,6 +69,7 @@ class ExpertChatActivity : AppCompatActivity() {
             mSocket.emit("join", jsonObject)
 
             //(3)메시지 수신
+
             mSocket.on("roomMessage") { args ->
                 val roomMessage  = args[0] as String
                 val senderID = args[1] as String
@@ -91,18 +93,14 @@ class ExpertChatActivity : AppCompatActivity() {
                     inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
                     if (input.isNotBlank()) {
                         val message = input
-                        //(2) 채팅을 서버로부터 전송
                         val dataToJson2 = roomName?.let{ SocketData(message, it, id) }
                         val jsonObject2 = JSONObject()
-                        if (dataToJson2 != null) {
+                        if (dataToJson2 != null)
                             jsonObject2.put("message", dataToJson2.message)
-                        }
-                        if (dataToJson2 != null) {
+                        if (dataToJson2 != null)
                             jsonObject2.put("room", dataToJson2.room)
-                        }
-                        if (dataToJson2 != null) {
+                        if (dataToJson2 != null)
                             jsonObject2.put("senderID", dataToJson2.senderID)
-                        }
                         mSocket.emit("chatMessage", jsonObject2)
 
                         showAlertDialog(message)

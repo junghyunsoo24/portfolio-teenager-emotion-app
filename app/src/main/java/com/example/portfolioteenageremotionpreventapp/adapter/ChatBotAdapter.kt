@@ -26,10 +26,10 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) :
         val messagePair = chatBotData[position]
 
         holder.inputMessageTextView.text = messagePair.inputMessage
-        holder.inputMessageTextView.textSize = 23f
+        holder.inputMessageTextView.textSize = 15f
 
         holder.responseMessageTextView.text = messagePair.responseMessage
-        holder.responseMessageTextView.textSize = 23f
+        holder.responseMessageTextView.textSize = 15f
     }
 
     override fun getItemCount(): Int = chatBotData.size
