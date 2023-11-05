@@ -56,6 +56,12 @@ class ChatBotActivity : AppCompatActivity() {
                 val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
                 if (teenMessage.isNotBlank()) {
+                    val chatBotDataPair = ChatBotDataPair(teenMessage, "")
+                    messages.add(chatBotDataPair)
+                    adapter.notifyDataSetChanged()
+                    scrollToBottom()
+                    saveChatHistory()
+
                     mobileToServer()
 
                     binding.input.text = null
@@ -109,12 +115,10 @@ class ChatBotActivity : AppCompatActivity() {
                         if (responseBody != null) {
                             val responseData = responseBody.chatbot
 
-                            val chatBotDataPair = ChatBotDataPair(teenMessage, responseData)
+                            val chatBotDataPair = ChatBotDataPair("", responseData)
                             messages.add(chatBotDataPair)
-
                             adapter.notifyDataSetChanged()
                             scrollToBottom()
-
                             saveChatHistory()
                         } else {
                             Log.e("@@@@Error3", "Response body is null")

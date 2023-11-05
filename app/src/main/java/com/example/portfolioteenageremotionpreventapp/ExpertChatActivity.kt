@@ -69,14 +69,13 @@ class ExpertChatActivity : AppCompatActivity() {
             mSocket.emit("join", jsonObject)
 
             //(3)메시지 수신
-
             mSocket.on("roomMessage") { args ->
                 val roomMessage  = args[0] as String
                 val senderID = args[1] as String
 
                 if (senderID != id) {
                     runOnUiThread {
-                        val messagePair = ExpertChatDataPair(input, roomMessage)
+                        val messagePair = ExpertChatDataPair("", roomMessage)
                         messages.add(messagePair)
 
                         adapter.notifyDataSetChanged()
@@ -92,6 +91,14 @@ class ExpertChatActivity : AppCompatActivity() {
                     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
                     if (input.isNotBlank()) {
+                        val messagePair = ExpertChatDataPair(input, "")
+                        messages.add(messagePair)
+
+                        adapter.notifyDataSetChanged()
+                        saveExpertChatHistory()
+                        scrollToBottom()
+
+                        //(2)메시지 전달
                         val message = input
                         val dataToJson2 = roomName?.let{ SocketData(message, it, id) }
                         val jsonObject2 = JSONObject()
@@ -103,7 +110,7 @@ class ExpertChatActivity : AppCompatActivity() {
                             jsonObject2.put("senderID", dataToJson2.senderID)
                         mSocket.emit("chatMessage", jsonObject2)
 
-                        showAlertDialog(message)
+//                        showAlertDialog(message)
 
                         binding.input.text = null
                     }
@@ -129,15 +136,15 @@ class ExpertChatActivity : AppCompatActivity() {
         loadChatHistory()
     }
 
-    private fun showAlertDialog(message: String) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("채팅 보내기 성공")
-        builder.setMessage("$message\n를 성공적으로 보냈습니다. 답장올때까지 기다려주세요.")
-        builder.setPositiveButton("확인") { dialog, _ ->
-            dialog.dismiss()
-        }
-        builder.show()
-    }
+//    private fun showAlertDialog(message: String) {
+//        val builder = AlertDialog.Builder(this)
+//        builder.setTitle("채팅 보내기 성공")
+//        builder.setMessage("$message\n를 성공적으로 보냈습니다. 답장올때까지 기다려주세요.")
+//        builder.setPositiveButton("확인") { dialog, _ ->
+//            dialog.dismiss()
+//        }
+//        builder.show()
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
