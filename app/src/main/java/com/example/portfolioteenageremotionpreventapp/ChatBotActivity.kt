@@ -25,7 +25,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
 
 class ChatBotActivity : AppCompatActivity() {
-    private lateinit var input: String
+    private lateinit var teenMessage: String
     private lateinit var id: String
 
     private lateinit var adapter: ChatBotAdapter
@@ -52,10 +52,10 @@ class ChatBotActivity : AppCompatActivity() {
 
         binding.input.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                input = binding.input.text.toString()
+                teenMessage = binding.input.text.toString()
                 val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
-                if (input.isNotBlank()) {
+                if (teenMessage.isNotBlank()) {
                     mobileToServer()
 
                     binding.input.text = null
@@ -99,7 +99,7 @@ class ChatBotActivity : AppCompatActivity() {
     private fun mobileToServer() {
         lifecycleScope.launch {
             try {
-                val message = ChatBotData(id, input)
+                val message = ChatBotData(id, teenMessage)
 
                 val response = viewModel.getUrl().value?.let { ChatBotApi.retrofitService(it).sendMessage(message) }
 
@@ -107,9 +107,9 @@ class ChatBotActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val responseBody = response?.body()
                         if (responseBody != null) {
-                            val responseData = responseBody.bot
+                            val responseData = responseBody.chatbot
 
-                            val chatBotDataPair = ChatBotDataPair(input, responseData)
+                            val chatBotDataPair = ChatBotDataPair(teenMessage, responseData)
                             messages.add(chatBotDataPair)
 
                             adapter.notifyDataSetChanged()
