@@ -3,6 +3,9 @@ package com.example.portfolioteenageremotionpreventapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -16,6 +19,7 @@ import com.example.portfolioteenageremotionpreventapp.databinding.ActivityRegist
 import com.example.portfolioteenageremotionpreventapp.register.RegisterApi
 import com.example.portfolioteenageremotionpreventapp.register.RegisterData
 import kotlinx.coroutines.launch
+import kotlin.properties.Delegates
 
 class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var viewModel: AppViewModel
@@ -23,13 +27,15 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
     private lateinit var id: String
     private lateinit var pw: String
     private lateinit var name: String
-    private lateinit var age: String
+    private lateinit var ageInput: String
     private lateinit var address: String
     private lateinit var gender: String
     private lateinit var phone_num: String
 
+    private var age = 0
+    private val assignments = 0
     private lateinit var genderValue: String
-    private lateinit var text: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,15 +65,16 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
             id = binding.firstIdInput.text.toString()
             pw = binding.firstPwdInput.text.toString()
             name = binding.nameInput.text.toString()
-            age = binding.ageInput.text.toString()
+            ageInput = binding.ageInput.text.toString()
             address = binding.addressInput.text.toString()
-            gender?.let { selectedGender ->
-                genderValue = if (selectedGender == "남") "0" else "1"
+            genderValue?.let { selectedGender ->
+                gender = if (selectedGender == "남") "0" else "1"
             }
             phone_num = binding.addressInput.text.toString()
-
+            viewModel.setUrl(resources.getString(R.string.api_ip_server))
             mobileToServer()
         }
+
     }
 
     override fun onItemSelected(
@@ -76,7 +83,7 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
         position: Int,
         id: Long
     ) {
-        gender = parent?.getItemAtPosition(position).toString()
+        genderValue = parent?.getItemAtPosition(position).toString()
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -97,24 +104,25 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
             dialog.dismiss()
             onRegisterButtonClicked()
         }
-
         builder.show()
     }
 
     private fun mobileToServer() {
         lifecycleScope.launch {
             try {
-                val message = RegisterData(id, pw, name, age, address, genderValue, phone_num)
-                val response = viewModel.getUrl().value?.let { RegisterApi.retrofitService(it).sendsMessage(message) }
+                age = ageInput.toInt()
+                val message =
+                    RegisterData(id, pw, name, age, address, gender, phone_num, assignments)
+                val response = viewModel.getUrl().value?.let {
+                    RegisterApi.retrofitService(it).sendsMessage(message)
+                }
                 if (response != null) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
                         if (responseBody != null) {
-                            // 서버 응답을 확인하는 작업 수행
                             val responseData = responseBody.result
 
                             showAlertDialog(responseData)
-
                         } else {
                             Log.e("@@@@Error3", "Response body is null")
                         }
@@ -126,5 +134,13 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 Log.e("@@@@Error1", Ex.stackTraceToString())
             }
         }
+    }
+
+    // 화면 터치 시 키보드 내리기
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val imm: InputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        return super.dispatchTouchEvent(ev)
     }
 }
