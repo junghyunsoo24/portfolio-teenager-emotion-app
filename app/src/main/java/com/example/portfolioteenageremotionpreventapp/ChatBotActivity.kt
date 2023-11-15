@@ -117,7 +117,7 @@ class ChatBotActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val responseBody = response?.body()
                         if (responseBody != null) {
-                            val responseData = responseBody.bot
+                            val responseData = responseBody.chatbot
 
                             val chatBotDataPair = ChatBotDataPair("", responseData)
                             messages.add(chatBotDataPair)

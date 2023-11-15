@@ -27,22 +27,22 @@ private val moshi = Moshi.Builder()//더 편하게 하기 위해서 사용
 private fun createRetrofit(baseUrl: String, timeout: Long): Retrofit {
     val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(mHttpLoggingInterceptor)
-        .connectTimeout(timeout, TimeUnit.SECONDS) // 연결 타임아웃 설정
-        .readTimeout(timeout, TimeUnit.SECONDS) // 읽기 타임아웃 설정
-        .writeTimeout(timeout, TimeUnit.SECONDS) // 쓰기 타임아웃 설정
+        .connectTimeout(timeout, TimeUnit.SECONDS)
+        .readTimeout(timeout, TimeUnit.SECONDS)
+        .writeTimeout(timeout, TimeUnit.SECONDS)
         .build()
 
     return Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .baseUrl(baseUrl)
-        .client(okHttpClient) // OkHttpClient를 Retrofit에 설정
+        .client(okHttpClient)
         .build()
 }
 
 interface ChatBotApiService {
     @Headers("Content-Type: application/json")
 
-    @POST("/chat")
+    @POST("/v1/chat/chatbot-message")
     suspend fun sendMessage(@Body message: ChatBotData): Response<ChatBotDataResponse>
 
 }
