@@ -14,6 +14,8 @@ class AppViewModel private constructor() : ViewModel() {
 
     private val urlLiveData = MutableLiveData<String>()
 
+    private val currentDate = MutableLiveData<String>()
+
     fun setJwtToken(token: String) {
         jwtTokenLiveData.value = token
     }
@@ -44,6 +46,14 @@ class AppViewModel private constructor() : ViewModel() {
 
     fun getUrl(): LiveData<String> {
         return urlLiveData
+    }
+
+    fun setCurrentDate(date: String) {
+        currentDate.value = date
+    }
+
+    fun getCurrentDate(): LiveData<String> {
+        return currentDate
     }
 
     fun setMessageList(messages: List<String>) {

@@ -23,6 +23,8 @@ import com.example.portfolioteenageremotionpreventapp.databinding.ActivityChatbo
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ChatBotActivity : AppCompatActivity() {
     private lateinit var teenMessage: String
@@ -45,6 +47,9 @@ class ChatBotActivity : AppCompatActivity() {
         viewModel = AppViewModel.getInstance()
 
         id = viewModel.getUserId().value.toString()
+
+        viewModel.setCurrentDate(getCurrentDate())
+        binding.chatBot.text = viewModel.getCurrentDate().value
 
         adapter = ChatBotAdapter(messages)
         binding.chatBotRecyclerView.adapter = adapter
@@ -169,5 +174,11 @@ class ChatBotActivity : AppCompatActivity() {
         val chatHistoryJson = Gson().toJson(messages)
         editor.putString(id, chatHistoryJson)
         editor.apply()
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일 EEEE", Locale.getDefault())
+        val date = Date(System.currentTimeMillis())
+        return dateFormat.format(date)
     }
 }
