@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showAlertDialog(message: String) {
         val builder = AlertDialog.Builder(this)
-        if (message == "0") {
+        if (message == "teenager") {
             builder.setTitle("로그인 성공")
             builder.setMessage("다음 화면으로 이동합니다")
             builder.setPositiveButton("확인") { dialog, _ ->
@@ -94,7 +94,8 @@ class LoginActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
                         if (responseBody != null) {
-                            val responseData = responseBody.result
+                            viewModel.setJwtToken(responseBody.access_token)
+                            val responseData = responseBody.role
                             showAlertDialog(responseData)
 
                             viewModel.setUserId(id)

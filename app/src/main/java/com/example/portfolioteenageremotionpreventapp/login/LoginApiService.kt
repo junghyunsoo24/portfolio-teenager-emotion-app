@@ -32,7 +32,7 @@ private fun createRetrofit(baseUrl: String): Retrofit {
 interface LoginApiService {
     @Headers("Content-Type: application/json")
 
-    @POST("/login")
+    @POST("/v1/auth/signIn")
     suspend fun sendsMessage(@Body message: LoginData): Response<LoginDataResponse>
 
 }
