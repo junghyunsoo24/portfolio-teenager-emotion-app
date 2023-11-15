@@ -9,13 +9,13 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="@null"
-        android:src="@drawable/friend" />
+<!--    <ImageView-->
+<!--        android:layout_width="120dp"-->
+<!--        android:layout_height="120dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:contentDescription="@null"-->
+<!--        android:src="@drawable/friend" />-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="32dp"
-        android:text="청소년 모니터링"
+        android:text="청소년 대화하기"
         android:textSize="24sp"
         android:textStyle="bold" />
 

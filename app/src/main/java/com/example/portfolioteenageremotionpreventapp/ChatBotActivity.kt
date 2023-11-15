@@ -107,13 +107,17 @@ class ChatBotActivity : AppCompatActivity() {
             try {
                 val message = ChatBotData(id, teenMessage)
 
-                val response = viewModel.getUrl().value?.let { ChatBotApi.retrofitService(it).sendMessage(message) }
+                val response = viewModel.getUrl().value?.let {
+                    // Retrofit 설정을 통해 타임아웃을 조정
+                    val retrofit = ChatBotApi.retrofitService(it, timeout = 180) // 타임아웃을 60초로 설정
+                    retrofit.sendMessage(message)
+                }
 
                 if (response != null) {
                     if (response.isSuccessful) {
                         val responseBody = response?.body()
                         if (responseBody != null) {
-                            val responseData = responseBody.chatbot
+                            val responseData = responseBody.bot
 
                             val chatBotDataPair = ChatBotDataPair("", responseData)
                             messages.add(chatBotDataPair)
