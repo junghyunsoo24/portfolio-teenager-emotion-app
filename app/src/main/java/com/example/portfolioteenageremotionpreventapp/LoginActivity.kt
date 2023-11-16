@@ -56,19 +56,19 @@ class LoginActivity : AppCompatActivity() {
             onJoinButtonClicked()
         }
 
-        binding.idInput.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                binding.idInput.setHintTextColor(Color.TRANSPARENT)
-            }
-            false
-        }
+//        binding.idInput.setOnTouchListener { _, event ->
+//            if (event.action == MotionEvent.ACTION_DOWN) {
+//                binding.idInput.setHintTextColor(Color.TRANSPARENT)
+//            }
+//            false
+//        }
 
-        binding.pwdInput.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                binding.pwdInput.setHintTextColor(Color.TRANSPARENT)
-            }
-            false
-        }
+//        binding.pwdInput.setOnTouchListener { _, event ->
+//            if (event.action == MotionEvent.ACTION_DOWN) {
+//                binding.pwdInput.setHintTextColor(Color.TRANSPARENT)
+//            }
+//            false
+//        }
 
     }
 
