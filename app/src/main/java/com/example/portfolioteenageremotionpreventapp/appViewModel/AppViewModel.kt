@@ -9,6 +9,11 @@ class AppViewModel private constructor() : ViewModel() {
 
     private val userIdLiveData = MutableLiveData<String>()
     private val userPwdLiveData = MutableLiveData<String>()
+    private val userNameLiveData = MutableLiveData<String>()
+    private val userAgeLiveData = MutableLiveData<Int>()
+    private val userAddressLiveData = MutableLiveData<String>()
+    private val userGenderLiveData = MutableLiveData<String>()
+    private val userPhoneNumLiveData = MutableLiveData<String>()
 
     private val messageListLiveData = MutableLiveData<List<String>>()
 
@@ -38,6 +43,46 @@ class AppViewModel private constructor() : ViewModel() {
 
     fun getUserPwd(): LiveData<String> {
         return userPwdLiveData
+    }
+
+    fun setUserName(name: String) {
+        userNameLiveData.value = name
+    }
+
+    fun getUserName(): LiveData<String> {
+        return userNameLiveData
+    }
+
+    fun setUserAge(age: Int) {
+        userAgeLiveData.value = age
+    }
+
+    fun getUserAge(): LiveData<Int> {
+        return userAgeLiveData
+    }
+
+    fun setUserAddress(address: String) {
+        userAddressLiveData.value = address
+    }
+
+    fun getUserAddress(): LiveData<String> {
+        return userAddressLiveData
+    }
+
+    fun setUserGender(gender: String) {
+        userGenderLiveData.value = gender
+    }
+
+    fun getUserGender(): LiveData<String> {
+        return userGenderLiveData
+    }
+
+    fun setUserPhoneNum(phoneNum: String) {
+        userPhoneNumLiveData.value = phoneNum
+    }
+
+    fun getUserPhoneNum(): LiveData<String> {
+        return userPhoneNumLiveData
     }
 
     fun setUrl(url: String) {

@@ -39,7 +39,7 @@
             android:parentActivityName=".LoginActivity" />
 
         <activity
-            android:name=".MyPageActivity"
+            android:name=".InfoListActivity"
             android:parentActivityName=".ChatBotActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

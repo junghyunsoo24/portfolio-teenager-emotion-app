@@ -99,7 +99,7 @@ class ChatBotActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.myPage_btn -> {
-                val intent = Intent(this, MyPageActivity::class.java)
+                val intent = Intent(this, InfoListActivity::class.java)
                 startActivity(intent)
                 return true
             }

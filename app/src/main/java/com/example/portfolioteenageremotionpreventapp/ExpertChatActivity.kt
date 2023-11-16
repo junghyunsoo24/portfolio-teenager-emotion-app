@@ -47,7 +47,7 @@ class ExpertChatActivity : AppCompatActivity() {
 
         viewModel = AppViewModel.getInstance()
 
-        id = viewModel.getUserId().value!!
+        id = viewModel.getUserId().value.toString()
 
         adapter = ExpertChatAdapter(messages)
         binding.expertChatRecyclerView.adapter = adapter
@@ -154,7 +154,7 @@ class ExpertChatActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.myPage_btn -> {
-                val intent = Intent(this, MyPageActivity::class.java)
+                val intent = Intent(this, InfoListActivity::class.java)
                 startActivity(intent)
                 return true
             }
