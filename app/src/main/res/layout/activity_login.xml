@@ -8,91 +8,123 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/id"
-        android:layout_width="295dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="16dp"
-        android:text="아이디"
-        android:textSize="20sp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.224"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/id_input"
-        android:layout_width="240dp"
-        android:layout_height="60dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="아이디를 입력하세요."
-        android:inputType="textPersonName"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.315"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"></LinearLayout>
 
-    <TextView
-        android:id="@+id/pwd"
-        android:layout_width="295dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="24dp"
-        android:text="비밀번호"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.224"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_input" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/pwd_input"
-        android:layout_width="240dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="비밀번호를 입력하세요."
-        android:inputType="textPersonName"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.224"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pwd" />
+            <LinearLayout
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"></LinearLayout>
+            <TextView
+                android:id="@+id/id"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:text="아이디"
+                android:textSize="20sp"/>
 
-    <TextView
-        android:id="@+id/join_text"
-        android:layout_width="247dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="72dp"
-        android:text="아직 회원이 아니신가요?"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/join_btn"
-        app:layout_constraintHorizontal_bias="0.612"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pwd_input" />
+            <LinearLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"></LinearLayout>
 
-    <Button
-        android:id="@+id/join_btn"
-        android:layout_width="133dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="16dp"
-        android:text="회원가입"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pwd_input" />
+            <EditText
+                android:id="@+id/id_input"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:hint="아이디를 입력하세요."
+                android:textSize="20sp"
+                android:maxLines="1"
+                android:scrollHorizontally="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"></LinearLayout>
+            <TextView
+                android:id="@+id/pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:text="비밀번호"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"></LinearLayout>
+
+            <EditText
+                android:id="@+id/pwd_input"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:hint="비밀번호를 입력 하세요."
+                android:inputType="textPassword"
+                android:textSize="20sp"
+                android:maxLines="1"
+                android:scrollHorizontally="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/join_text"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:text="아직 회원이 아니신가요?"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/join_btn"
+                android:layout_width="133dp"
+                android:layout_height="60dp"
+                android:text="회원가입"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/login_btn"
         android:layout_width="275dp"
         android:layout_height="64dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginBottom="168dp"
         android:text="로그인"
+        android:gravity="center"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_text" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

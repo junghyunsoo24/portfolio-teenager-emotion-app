@@ -1,6 +1,7 @@
 package com.example.portfolioteenageremotionpreventapp
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -53,6 +54,20 @@ class LoginActivity : AppCompatActivity() {
 
         join.setOnClickListener {
             onJoinButtonClicked()
+        }
+
+        binding.idInput.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                binding.idInput.setHintTextColor(Color.TRANSPARENT)
+            }
+            false
+        }
+
+        binding.pwdInput.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                binding.pwdInput.setHintTextColor(Color.TRANSPARENT)
+            }
+            false
         }
 
     }
