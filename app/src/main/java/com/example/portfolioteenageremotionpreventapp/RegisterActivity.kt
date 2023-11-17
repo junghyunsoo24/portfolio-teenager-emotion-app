@@ -97,12 +97,23 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
     private fun showAlertDialog(message: String) {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle(message)
-        builder.setMessage("회원가입 성공")
+        builder.setTitle("회원가입 성공")
+        builder.setMessage("회원가입이 완료되었습니다!")
 
         builder.setPositiveButton("확인") { dialog, _ ->
             dialog.dismiss()
             onRegisterButtonClicked()
+        }
+        builder.show()
+    }
+
+    private fun showAlertDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("회원가입 실패")
+        builder.setMessage("다시 시도하세요.")
+
+        builder.setPositiveButton("확인") { dialog, _ ->
+            dialog.dismiss()
         }
         builder.show()
     }
@@ -132,6 +143,7 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 }
             } catch (Ex: Exception) {
                 Log.e("@@@@Error1", Ex.stackTraceToString())
+                showAlertDialog()
             }
         }
     }

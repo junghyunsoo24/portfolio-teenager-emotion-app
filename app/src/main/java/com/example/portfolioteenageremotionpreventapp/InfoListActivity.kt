@@ -1,9 +1,14 @@
 package com.example.portfolioteenageremotionpreventapp
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.portfolioteenageremotionpreventapp.appViewModel.AppViewModel
@@ -11,6 +16,8 @@ import com.example.portfolioteenageremotionpreventapp.databinding.ActivityInfoli
 import com.example.portfolioteenageremotionpreventapp.infoList.InfoListApi
 import com.example.portfolioteenageremotionpreventapp.infoList.InfoListData
 import com.example.portfolioteenageremotionpreventapp.infoList.InfoListDataResponse
+import com.example.portfolioteenageremotionpreventapp.logout.LogoutApi
+import com.example.portfolioteenageremotionpreventapp.logout.LogoutData
 import kotlinx.coroutines.launch
 
 class InfoListActivity : AppCompatActivity() {
@@ -18,7 +25,11 @@ class InfoListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityInfolistBinding
     private lateinit var result: InfoListDataResponse
     private lateinit var id: String
+    private lateinit var pw: String
     private lateinit var baseUrl: String
+
+    private val chatBotKey = "chatBot_history"
+    private val expertKey = "expert_history"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +50,40 @@ class InfoListActivity : AppCompatActivity() {
         viewModel = AppViewModel.getInstance()
 
         id = viewModel.getUserId().value.toString()
+        pw = viewModel.getUserPwd().value.toString()
 
         baseUrl = resources.getString(R.string.api_ip_server)
         mobileToServer()
+
+        binding.logoutBtn.setOnClickListener {
+            clearChatHistory()
+            mobileToServers()
+        }
+    }
+
+    private fun showAlertDialog(message: String) {
+        val builder = AlertDialog.Builder(this)
+        if (message == "1") {
+            builder.setTitle("회원탈퇴 성공")
+            builder.setMessage("회원탈퇴 완료")
+            builder.setPositiveButton("확인") { dialog, _ ->
+                dialog.dismiss()
+                onLogoutButtonClicked()
+            }
+        } else {
+            builder.setTitle("회원탈퇴 실패")
+            builder.setMessage("다시 시도하세요.")
+            builder.setPositiveButton("확인") { dialog, _ ->
+                dialog.dismiss()
+            }
+        }
+
+        builder.show()
+    }
+
+    private fun onLogoutButtonClicked() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     private fun mobileToServer() {
@@ -77,5 +119,55 @@ class InfoListActivity : AppCompatActivity() {
                 Log.e("@@@@Error1", Ex.stackTraceToString())
             }
         }
+    }
+
+    private fun mobileToServers() {
+        lifecycleScope.launch {
+            try {
+                val message = LogoutData(id, pw, "teenager")
+                val response = LogoutApi.retrofitService(baseUrl).sendsMessage(message)
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        showAlertDialog(responseBody.affected)
+
+                    } else {
+                        Log.e("@@@@Error3", "Response body is null")
+                    }
+                } else {
+                    Log.e("@@@@Error2", "Response not successful: ${response.code()}")
+                }
+            } catch (Ex: Exception) {
+                Log.e("@@@@Error1", Ex.stackTraceToString())
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menuset: Menu): Boolean {
+        menuInflater.inflate(R.menu.menuset, menuset)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.myPage_set_btn -> {
+                val intent = Intent(this, InfoSetListActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun clearChatHistory() {
+        val chatBot = getSharedPreferences(chatBotKey, Context.MODE_PRIVATE)
+        val chatBotEditor = chatBot.edit()
+        chatBotEditor.remove(viewModel.getUserId().value)
+        chatBotEditor.apply()
+
+        val expert = getSharedPreferences(expertKey, Context.MODE_PRIVATE)
+        val expertEditor = expert.edit()
+        expertEditor.remove(viewModel.getUserId().value)
+        expertEditor.apply()
     }
 }

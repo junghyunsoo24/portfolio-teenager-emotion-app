@@ -92,6 +92,20 @@ class LoginActivity : AppCompatActivity() {
         builder.show()
     }
 
+    private fun showAlertDialog() {
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle("로그인 실패")
+        builder.setMessage("다시 입력하세요")
+        builder.setPositiveButton("확인") { dialog, _ ->
+            dialog.dismiss()
+
+        }
+
+        builder.show()
+    }
+
+
     private fun onLoginButtonClicked() {
         val intent: Intent = Intent(this, SelectActivity::class.java)
         startActivity(intent)
@@ -106,7 +120,9 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val message = LoginData(id, pw)
-                val response = viewModel.getUrl().value?.let { LoginApi.retrofitService(it).sendsMessage(message) }
+                val response = viewModel.getUrl().value?.let {
+                    LoginApi.retrofitService(it).sendsMessage(message)
+                }
                 if (response != null) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
@@ -121,6 +137,7 @@ class LoginActivity : AppCompatActivity() {
                             Log.e("@@@@Error3", "Response body is null")
                         }
                     } else {
+                        showAlertDialog()
                         Log.e("@@@@Error2", "Response not successful: ${response.code()}")
                     }
                 }
