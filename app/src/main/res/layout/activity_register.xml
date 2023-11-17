@@ -32,7 +32,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:text="아이디"
-                    android:textSize="20sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="40dp"
@@ -41,12 +42,13 @@
 
                 <EditText
                     android:id="@+id/first_id_input"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="아이디를 입력하세요."
+                    android:maxWidth="250dp"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -64,7 +66,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:text="비밀번호"
-                    android:textSize="20sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="20dp"
@@ -73,13 +76,14 @@
 
                 <EditText
                     android:id="@+id/first_pwd_input"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="비밀번호를 입력하세요."
+                    android:maxWidth="250dp"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -97,7 +101,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:text="이름"
-                    android:textSize="20sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -106,13 +111,14 @@
 
                 <EditText
                     android:id="@+id/name_input"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="이름을 입력하세요."
+                    android:maxWidth="250dp"
                     android:inputType="textPersonName"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -130,7 +136,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:text="나이"
-                    android:textSize="20sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -139,13 +146,13 @@
 
                 <EditText
                     android:id="@+id/age_input"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="나이를 입력하세요."
                     android:inputType="number"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -163,7 +170,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:text="주소"
-                    android:textSize="20sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -172,13 +180,13 @@
 
                 <EditText
                     android:id="@+id/address_input"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="주소를 입력하세요."
                     android:inputType="text"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -196,7 +204,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:text="성별"
-                    android:textSize="20sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="60dp"
@@ -226,7 +235,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
                     android:text="핸드폰"
-                    android:textSize="20sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
 
                 <LinearLayout
@@ -236,26 +246,26 @@
 
                 <EditText
                     android:id="@+id/phone_input"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="핸드폰번호를 입력하세요."
-                    android:gravity="center"
                     android:inputType="phone"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
     <Button
         android:id="@+id/regist_btn"
-        android:layout_width="275dp"
-        android:layout_height="64dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="52dp"
-        android:text="회원 가입"
-        android:textSize="24sp"
+        android:layout_marginBottom="100dp"
+        android:text="회원가입"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -29,7 +29,7 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) :
             holder.inputMessageTextView.visibility = View.GONE
         } else {
             holder.inputMessageTextView.text = messagePair.inputMessage
-            holder.inputMessageTextView.textSize = 15f
+            holder.inputMessageTextView.textSize = 16f
             holder.inputMessageTextView.visibility = View.VISIBLE
         }
 
@@ -37,7 +37,7 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) :
             holder.responseMessageTextView.visibility = View.GONE
         } else {
             holder.responseMessageTextView.text = messagePair.responseMessage
-            holder.responseMessageTextView.textSize = 15f
+            holder.responseMessageTextView.textSize = 16f
             holder.responseMessageTextView.visibility = View.VISIBLE
         }
     }
