@@ -76,11 +76,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"></LinearLayout>
 
-                <TextView
+                <EditText
                     android:id="@+id/first_pwd_input"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:hint="비밀번호를 입력하세요."
+                    android:inputType="textPassword"
+                    android:maxWidth="250dp"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
                     android:textSize="16sp" />

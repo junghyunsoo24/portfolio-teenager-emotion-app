@@ -63,18 +63,14 @@ class InfoSetListActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         spinner.onItemSelectedListener = this
 
         id = viewModel.getUserId().value.toString()
-        pw = viewModel.getUserPwd().value.toString()
-
-
         binding.idInput.text = id
-        binding.firstPwdInput.text = pw
-
 
         binding.infoSetBtn.setOnClickListener {
             pw = binding.firstPwdInput.text.toString()
             if(pw == "") {
                 pw = viewModel.getUserPwd().value.toString()
             }
+            Log.e("pwd", pw)
 
             name = binding.nameInput.text.toString()
             if(name == "") {
@@ -125,11 +121,6 @@ class InfoSetListActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         builder.show()
     }
 
-    private fun onSelectButtonClicked() {
-        val intent = Intent(this, InfoListActivity::class.java)
-        startActivity(intent)
-    }
-
     private fun mobileToServer() {
         lifecycleScope.launch {
             try {
@@ -147,8 +138,7 @@ class InfoSetListActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
                         viewModel.setUserGender(result.gender)
                         viewModel.setUserPhoneNum(result.phone_num)
 
-                        Log.e("1",result.name)
-
+                        viewModel.setUserPwd(pw)
                     } else {
                         Log.e("@@@@Error3", "Response body is null")
                     }
