@@ -107,7 +107,10 @@ class InfoListActivity : AppCompatActivity() {
                         binding.nameInput.text = viewModel.getUserName().value.toString()
                         binding.ageInput.text = viewModel.getUserAge().value.toString()
                         binding.addressInput.text = viewModel.getUserAddress().value.toString()
-                        binding.genderInput.text = viewModel.getUserGender().value.toString()
+                        if(result.gender == "0")
+                            binding.genderInput.text = "남"
+                        else if(result.gender == "1")
+                            binding.genderInput.text = "여"
                         binding.phoneInput.text = viewModel.getUserPhoneNum().value.toString()
                     } else {
                         Log.e("@@@@Error3", "Response body is null")
