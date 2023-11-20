@@ -3,15 +3,11 @@ package com.example.portfolioteenageremotionpreventapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.portfolioteenageremotionpreventapp.adapter.ExpertChatAdapter
@@ -24,6 +20,8 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
 import java.net.URISyntaxException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ExpertChatActivity : AppCompatActivity() {
     private lateinit var input: String
@@ -49,6 +47,9 @@ class ExpertChatActivity : AppCompatActivity() {
 
         id = viewModel.getUserId().value.toString()
 
+        viewModel.setCurrentDate(getCurrentDate())
+        binding.expertChat.text = viewModel.getCurrentDate().value
+
         adapter = ExpertChatAdapter(messages)
         binding.expertChatRecyclerView.adapter = adapter
         binding.expertChatRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -60,7 +61,6 @@ class ExpertChatActivity : AppCompatActivity() {
             mSocket.connect()
 
             val roomName = id
-            Log.e("test", roomName)
             //(1)입장
             val data = JoinData(id, roomName)
             val jsonObject = JSONObject()
@@ -88,16 +88,14 @@ class ExpertChatActivity : AppCompatActivity() {
             binding.input.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     input = binding.input.text.toString()
-                    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
+//                    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                    inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
                     if (input.isNotBlank()) {
                         val messagePair = ExpertChatDataPair(input, "")
                         messages.add(messagePair)
-
                         adapter.notifyDataSetChanged()
                         saveExpertChatHistory()
                         scrollToBottom()
-
                         //(2)메시지 전달
                         val message = input
                         val dataToJson2 = roomName?.let{ SocketData(message, it, id) }
@@ -109,15 +107,38 @@ class ExpertChatActivity : AppCompatActivity() {
                         if (dataToJson2 != null)
                             jsonObject2.put("senderID", dataToJson2.senderID)
                         mSocket.emit("chatMessage", jsonObject2)
-
 //                        showAlertDialog(message)
-
                         binding.input.text = null
                     }
                     true
                 } else {
                     false
                 }
+            }
+
+            binding.chatDeliver.setOnClickListener {
+                input = binding.input.text.toString()
+                if (input.isNotBlank()) {
+                    val messagePair = ExpertChatDataPair(input, "")
+                    messages.add(messagePair)
+                    adapter.notifyDataSetChanged()
+                    saveExpertChatHistory()
+                    scrollToBottom()
+                    //(2)메시지 전달
+                    val message = input
+                    val dataToJson2 = roomName?.let{ SocketData(message, it, id) }
+                    val jsonObject2 = JSONObject()
+                    if (dataToJson2 != null)
+                        jsonObject2.put("message", dataToJson2.message)
+                    if (dataToJson2 != null)
+                        jsonObject2.put("room", dataToJson2.room)
+                    if (dataToJson2 != null)
+                        jsonObject2.put("senderID", dataToJson2.senderID)
+                    mSocket.emit("chatMessage", jsonObject2)
+//                        showAlertDialog(message)
+                    binding.input.text = null
+                }
+                true
             }
         } catch (e: URISyntaxException) {
             e.printStackTrace()
@@ -168,12 +189,12 @@ class ExpertChatActivity : AppCompatActivity() {
         }
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        val imm: InputMethodManager =
-            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-        return super.dispatchTouchEvent(ev)
-    }
+//    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+//        val imm: InputMethodManager =
+//            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+//        return super.dispatchTouchEvent(ev)
+//    }
 
     private fun loadChatHistory() {
         val expert = getSharedPreferences(expertKey, Context.MODE_PRIVATE)
@@ -199,6 +220,12 @@ class ExpertChatActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mSocket.disconnect()
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일 EEEE", Locale.getDefault())
+        val date = Date(System.currentTimeMillis())
+        return dateFormat.format(date)
     }
 
     data class SocketData(val message: String?, val room: String, val senderID: String)

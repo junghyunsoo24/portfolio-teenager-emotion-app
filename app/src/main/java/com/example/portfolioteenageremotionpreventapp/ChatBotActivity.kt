@@ -58,8 +58,8 @@ class ChatBotActivity : AppCompatActivity() {
         binding.input.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 teenMessage = binding.input.text.toString()
-                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
+//                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
                 if (teenMessage.isNotBlank()) {
                     val chatBotDataPair = ChatBotDataPair(teenMessage, "")
                     messages.add(chatBotDataPair)
@@ -75,7 +75,21 @@ class ChatBotActivity : AppCompatActivity() {
             } else {
                 false
             }
+        }
 
+        binding.chatDeliver.setOnClickListener {
+            teenMessage = binding.input.text.toString()
+            if (teenMessage.isNotBlank()) {
+                val chatBotDataPair = ChatBotDataPair(teenMessage, "")
+                messages.add(chatBotDataPair)
+                adapter.notifyDataSetChanged()
+                scrollToBottom()
+                saveChatHistory()
+
+                mobileToServer()
+
+                binding.input.text = null
+            }
         }
 
         val actionBar: ActionBar? = supportActionBar
@@ -148,12 +162,12 @@ class ChatBotActivity : AppCompatActivity() {
         }
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        val imm: InputMethodManager =
-            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-        return super.dispatchTouchEvent(ev)
-    }
+//    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+//        val imm: InputMethodManager =
+//            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+//        return super.dispatchTouchEvent(ev)
+//    }
 
     private fun loadChatHistory() {
         val chatBot = getSharedPreferences(chatBotKey, Context.MODE_PRIVATE)

@@ -70,7 +70,7 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
             genderValue?.let { selectedGender ->
                 gender = if (selectedGender == "남") "0" else "1"
             }
-            phone_num = binding.addressInput.text.toString()
+            phone_num = binding.phoneInput.text.toString()
             viewModel.setUrl(resources.getString(R.string.api_ip_server))
             mobileToServer()
         }
