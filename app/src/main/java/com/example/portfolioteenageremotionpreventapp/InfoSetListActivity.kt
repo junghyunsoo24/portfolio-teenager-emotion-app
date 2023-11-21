@@ -116,9 +116,15 @@ class InfoSetListActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         builder.setMessage("개인정보수정 완료")
         builder.setPositiveButton("확인") { dialog, _ ->
             dialog.dismiss()
+            onInfoListButtonClicked()
         }
 
         builder.show()
+    }
+
+    private fun onInfoListButtonClicked() {
+        val intent: Intent = Intent(this, InfoListActivity::class.java)
+        startActivity(intent)
     }
 
     private fun mobileToServer() {
