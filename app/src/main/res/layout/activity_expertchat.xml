@@ -24,8 +24,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expertChatRecyclerView"
-        android:layout_width="406dp"
-        android:layout_height="373dp"
+        android:layout_width="388dp"
+        android:layout_height="326dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/expertChat" />
@@ -35,7 +35,6 @@
         android:layout_width="295dp"
         android:layout_height="56dp"
         android:gravity="center"
-        android:hint="채팅을 입력 하세요."
         android:inputType="textPersonName"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
