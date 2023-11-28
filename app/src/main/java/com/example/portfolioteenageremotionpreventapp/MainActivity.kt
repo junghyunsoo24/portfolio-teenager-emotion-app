@@ -1,6 +1,7 @@
 package com.example.portfolioteenageremotionpreventapp
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -26,6 +27,11 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val linkTextView: TextView = findViewById(R.id.icon_url)
+        linkTextView.setOnClickListener {
+            openLink()
+        }
+
         binding.childBtn.setOnClickListener {
             onStartButtonClicked()
         }
@@ -34,6 +40,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun onStartButtonClicked() {
         val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun openLink() {
+        // 링크 주소를 여기에 추가
+        val url = "https://Icons8.com"
+
+        // 인텐트를 사용하여 브라우저 열기
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
         startActivity(intent)
     }
 
