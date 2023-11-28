@@ -1,6 +1,7 @@
 package com.example.portfolioteenageremotionpreventapp
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -29,6 +30,11 @@ class SelectActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = AppViewModel.getInstance()
+
+        val linkTextView: TextView = findViewById(R.id.icon_url)
+        linkTextView.setOnClickListener {
+            openLink()
+        }
 
         binding.ChatBotBtn.setOnClickListener {
             onAIButtonClicked()
@@ -62,6 +68,14 @@ class SelectActivity : AppCompatActivity() {
 
     private fun onExpertButtonClicked(){
         val intent = Intent(this, ExpertChatActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun openLink() {
+        val url = "https://Icons8.com"
+
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
         startActivity(intent)
     }
 }
