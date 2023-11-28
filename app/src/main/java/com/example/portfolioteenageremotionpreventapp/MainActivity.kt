@@ -44,10 +44,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openLink() {
-        // 링크 주소를 여기에 추가
         val url = "https://Icons8.com"
 
-        // 인텐트를 사용하여 브라우저 열기
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(url)
         startActivity(intent)
