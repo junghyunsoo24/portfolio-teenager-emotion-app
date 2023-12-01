@@ -49,7 +49,7 @@ class ChatBotActivity : AppCompatActivity() {
         id = viewModel.getUserId().value.toString()
 
         viewModel.setCurrentDate(getCurrentDate())
-        binding.chatBot.text = viewModel.getCurrentDate().value
+//        binding.chatBot.text = viewModel.getCurrentDate().value
 
         adapter = ChatBotAdapter(messages)
         binding.chatBotRecyclerView.adapter = adapter
