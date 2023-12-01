@@ -158,23 +158,26 @@ class ChatBotActivity : AppCompatActivity() {
 
     private fun scrollToBottom() {
         binding.chatBotRecyclerView.post {
-            binding.chatBotRecyclerView.smoothScrollToPosition(adapter.itemCount - 1)
+            binding.chatBotRecyclerView.scrollToPosition(messages.size - 1)
         }
     }
 
-//    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-//        val imm: InputMethodManager =
-//            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-//        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-//        return super.dispatchTouchEvent(ev)
-//    }
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val imm: InputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        return super.dispatchTouchEvent(ev)
+    }
 
     private fun loadChatHistory() {
         val chatBot = getSharedPreferences(chatBotKey, Context.MODE_PRIVATE)
         val chatHistoryJson = chatBot.getString(id, "")
 
         if (!chatHistoryJson.isNullOrEmpty()) {
-            val chatHistory = Gson().fromJson<List<ChatBotDataPair>>(chatHistoryJson, object : TypeToken<List<ChatBotDataPair>>() {}.type)
+            val chatHistory = Gson().fromJson<List<ChatBotDataPair>>(
+                chatHistoryJson,
+                object : TypeToken<List<ChatBotDataPair>>() {}.type
+            )
             messages.addAll(chatHistory)
             adapter.notifyDataSetChanged()
             scrollToBottom()
