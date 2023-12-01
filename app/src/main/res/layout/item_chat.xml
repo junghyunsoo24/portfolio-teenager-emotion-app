@@ -38,21 +38,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end">
-
         <TextView
             android:id="@+id/input_time"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:gravity="bottom"
+            android:layout_gravity="bottom"
+            android:text="오후 5시:20"
             android:textColor="#000000"
             android:textSize="5sp"
-            android:text="오후 5시:20"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.25"  />
+        <LinearLayout
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"></LinearLayout>
         <TextView
             android:id="@+id/inputChatTextView"
             android:layout_width="wrap_content"
@@ -70,7 +73,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.25" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -97,12 +99,18 @@
             app:layout_constraintTop_toTopOf="@+id/inputChatBotTextView"
             app:layout_constraintWidth_percent="0.5" />
 
+        <LinearLayout
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"></LinearLayout>
+
         <TextView
             android:id="@+id/output_time"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:gravity="bottom"
+            android:layout_gravity="bottom"
             android:textColor="#000000"
             android:textSize="5sp"
             android:text="오후 5시:25"
