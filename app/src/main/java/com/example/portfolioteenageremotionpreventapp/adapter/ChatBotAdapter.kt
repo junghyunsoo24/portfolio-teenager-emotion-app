@@ -1,5 +1,6 @@
 package com.example.portfolioteenageremotionpreventapp.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.portfolioteenageremotionpreventapp.R
 import com.example.portfolioteenageremotionpreventapp.chatbot.ChatBotDataPair
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -57,16 +59,37 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) :
             holder.outputTimeView.visibility = View.VISIBLE
         }
 
-
-        // 현재 날짜를 가져오기
         val currentDate = Calendar.getInstance().time
-
-        // SimpleDateFormat을 사용하여 원하는 형식으로 날짜 포맷팅
         val sdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
         val formattedDate = sdf.format(currentDate)
+        if(position == 0) {
+            holder.dateTextView.text = formattedDate
+        }
 
-        // TextView에 형식화된 날짜 설정
-        holder.dateTextView.text = formattedDate
+        if (!messagePair.chatbotPreviousDate.isNullOrEmpty()) {
+            var chatBotDate: Date = try {
+                // Try parsing using the first date format
+                SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.US)
+                    .parse(messagePair.chatbotPreviousDate)
+            } catch (e: ParseException) {
+                // If parsing fails, try the second date format
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                    .parse(messagePair.chatbotPreviousDate)
+            }
+
+            val chatBotSdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
+            val chatBotFormattedDate = chatBotSdf.format(chatBotDate)
+
+            if (chatBotDate.before(currentDate)) {
+                holder.dateTextView.text = formattedDate
+            } else if (chatBotDate.after(currentDate)) {
+                holder.dateTextView.text = chatBotFormattedDate
+            } else {
+                holder.dateTextView.visibility = View.GONE
+            }
+        } else {
+            // Uncomment the following line if you want to display the current date
+        }
     }
 
     override fun getItemCount(): Int = chatBotData.size

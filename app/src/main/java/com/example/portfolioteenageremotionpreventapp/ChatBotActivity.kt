@@ -38,6 +38,8 @@ class ChatBotActivity : AppCompatActivity() {
 
     private val chatBotKey = "chatBot_history"
 
+    private lateinit var currentDate: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,13 +57,19 @@ class ChatBotActivity : AppCompatActivity() {
         binding.chatBotRecyclerView.adapter = adapter
         binding.chatBotRecyclerView.layoutManager = LinearLayoutManager(this)
 
+        currentDate = Calendar.getInstance().time.toString()
+
+        val currentDates = Calendar.getInstance().time
+        val sdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
+        val formattedDate = sdf.format(currentDates)
+
         binding.input.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 teenMessage = binding.input.text.toString()
 //                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 //                inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
                 if (teenMessage.isNotBlank()) {
-                    val chatBotDataPair = ChatBotDataPair(teenMessage, "")
+                    val chatBotDataPair = ChatBotDataPair(teenMessage, "", currentDate)
                     messages.add(chatBotDataPair)
                     adapter.notifyDataSetChanged()
                     scrollToBottom()
@@ -80,7 +88,7 @@ class ChatBotActivity : AppCompatActivity() {
         binding.chatDeliver.setOnClickListener {
             teenMessage = binding.input.text.toString()
             if (teenMessage.isNotBlank()) {
-                val chatBotDataPair = ChatBotDataPair(teenMessage, "")
+                val chatBotDataPair = ChatBotDataPair(teenMessage, "", currentDate)
                 messages.add(chatBotDataPair)
                 adapter.notifyDataSetChanged()
                 scrollToBottom()
@@ -137,8 +145,9 @@ class ChatBotActivity : AppCompatActivity() {
                         val responseBody = response?.body()
                         if (responseBody != null) {
                             val responseData = responseBody.chatbot
+                            val responseDate = responseBody.chatbotPreviousDate
 
-                            val chatBotDataPair = ChatBotDataPair("", responseData)
+                            val chatBotDataPair = ChatBotDataPair("", responseData, responseDate)
                             messages.add(chatBotDataPair)
                             adapter.notifyDataSetChanged()
                             scrollToBottom()
