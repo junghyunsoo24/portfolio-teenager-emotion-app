@@ -82,6 +82,18 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
         return ""
     }
 
+    private fun convertToKoreanTime(timeString: String): Date? {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val date = inputFormat.parse(timeString)
+
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        outputFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
+        val koreanTime = outputFormat.format(date)
+
+        return outputFormat.parse(koreanTime)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         viewModel = AppViewModel.getInstance()
@@ -118,7 +130,7 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
             teen = try {
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(messagePair.teenMessageTime)
             } catch (e: ParseException) {
-                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(messagePair.teenMessageTime)
+                convertToKoreanTime(messagePair.teenMessageTime)
             }
         }
         val teenSdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
@@ -136,7 +148,7 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
 
         var bot: Date? = null
         if (messagePair.chatBotMessageTime.isNotEmpty()) {
-            bot = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(messagePair.chatBotMessageTime)
+            bot = convertToKoreanTime(messagePair.chatBotMessageTime)
         }
         val chatBotSdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
         val botDate: String? = if (bot != null) {
