@@ -2,25 +2,34 @@ package com.example.portfolioteenageremotionpreventapp
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.portfolioteenageremotionpreventapp.adapter.ExpertChatAdapter
 import com.example.portfolioteenageremotionpreventapp.appViewModel.AppViewModel
 import com.example.portfolioteenageremotionpreventapp.databinding.ActivityExpertchatBinding
 import com.example.portfolioteenageremotionpreventapp.expertChat.ExpertChatDataPair
+import com.example.portfolioteenageremotionpreventapp.infoTeenChat.InfoTeenChatApi
+import com.example.portfolioteenageremotionpreventapp.infoTeenChat.InfoTeenChatData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.socket.client.IO
 import io.socket.client.Socket
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.net.URISyntaxException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ExpertChatActivity : AppCompatActivity() {
@@ -33,10 +42,14 @@ class ExpertChatActivity : AppCompatActivity() {
 
     private lateinit var viewModel: AppViewModel
 
-    private val expertKey = "expert_history"
+    private lateinit var startDate: String
+    private lateinit var endDate: String
+
+//    private val expertKey = "expert_history"
 
     private lateinit var mSocket: Socket
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,12 +60,14 @@ class ExpertChatActivity : AppCompatActivity() {
 
         id = viewModel.getUserId().value.toString()
 
-        viewModel.setCurrentDate(getCurrentDate())
-        binding.expertChat.text = viewModel.getCurrentDate().value
+//        viewModel.setCurrentDate(getCurrentDate())
+//        binding.expertChat.text = viewModel.getCurrentDate().value
 
         adapter = ExpertChatAdapter(messages)
         binding.expertChatRecyclerView.adapter = adapter
         binding.expertChatRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        mobileToServers()
 
         try {
             val options = IO.Options()
@@ -73,13 +88,16 @@ class ExpertChatActivity : AppCompatActivity() {
                 val roomMessage  = args[0] as String
                 val senderID = args[1] as String
 
+                val currentDateTime = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                val formattedDateTime = currentDateTime.format(formatter)
                 if (senderID != id) {
                     runOnUiThread {
-                        val messagePair = ExpertChatDataPair("", roomMessage)
+                        val messagePair = ExpertChatDataPair("", "", roomMessage, formattedDateTime, senderID)
                         messages.add(messagePair)
 
                         adapter.notifyDataSetChanged()
-                        saveExpertChatHistory()
+//                        saveExpertChatHistory()
                         scrollToBottom()
                     }
                 }
@@ -90,11 +108,14 @@ class ExpertChatActivity : AppCompatActivity() {
                     input = binding.input.text.toString()
 //                    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 //                    inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
+                    val currentDateTime = LocalDateTime.now()
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                    val formattedDateTime = currentDateTime.format(formatter)
                     if (input.isNotBlank()) {
-                        val messagePair = ExpertChatDataPair(input, "")
+                        val messagePair = ExpertChatDataPair(input, formattedDateTime, "", "", id)
                         messages.add(messagePair)
                         adapter.notifyDataSetChanged()
-                        saveExpertChatHistory()
+//                        saveExpertChatHistory()
                         scrollToBottom()
                         //(2)메시지 전달
                         val message = input
@@ -119,10 +140,13 @@ class ExpertChatActivity : AppCompatActivity() {
             binding.chatDeliver.setOnClickListener {
                 input = binding.input.text.toString()
                 if (input.isNotBlank()) {
-                    val messagePair = ExpertChatDataPair(input, "")
+                    val currentDateTime = LocalDateTime.now()
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                    val formattedDateTime = currentDateTime.format(formatter)
+                    val messagePair = ExpertChatDataPair(input, formattedDateTime, "", "", id)
                     messages.add(messagePair)
                     adapter.notifyDataSetChanged()
-                    saveExpertChatHistory()
+//                    saveExpertChatHistory()
                     scrollToBottom()
                     //(2)메시지 전달
                     val message = input
@@ -154,7 +178,7 @@ class ExpertChatActivity : AppCompatActivity() {
 
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        loadChatHistory()
+//        loadChatHistory()
     }
 
 //    private fun showAlertDialog(message: String) {
@@ -185,7 +209,7 @@ class ExpertChatActivity : AppCompatActivity() {
 
     private fun scrollToBottom() {
         binding.expertChatRecyclerView.post {
-            binding.expertChatRecyclerView.smoothScrollToPosition(adapter.itemCount - 1)
+            binding.expertChatRecyclerView.scrollToPosition(messages.size - 1)
         }
     }
 
@@ -196,26 +220,26 @@ class ExpertChatActivity : AppCompatActivity() {
 //        return super.dispatchTouchEvent(ev)
 //    }
 
-    private fun loadChatHistory() {
-        val expert = getSharedPreferences(expertKey, Context.MODE_PRIVATE)
-        val chatHistoryJson = expert.getString(id, "")
-
-        if (!chatHistoryJson.isNullOrEmpty()) {
-            val chatHistory = Gson().fromJson<List<ExpertChatDataPair>>(chatHistoryJson, object : TypeToken<List<ExpertChatDataPair>>() {}.type)
-            messages.addAll(chatHistory)
-            adapter.notifyDataSetChanged()
-            scrollToBottom()
-        }
-    }
-
-    private fun saveExpertChatHistory() {
-        val expert = getSharedPreferences(expertKey, Context.MODE_PRIVATE)
-        val editor = expert.edit()
-
-        val chatHistoryJson = Gson().toJson(messages)
-        editor.putString(id, chatHistoryJson)
-        editor.apply()
-    }
+//    private fun loadChatHistory() {
+//        val expert = getSharedPreferences(expertKey, Context.MODE_PRIVATE)
+//        val chatHistoryJson = expert.getString(id, "")
+//
+//        if (!chatHistoryJson.isNullOrEmpty()) {
+//            val chatHistory = Gson().fromJson<List<ExpertChatDataPair>>(chatHistoryJson, object : TypeToken<List<ExpertChatDataPair>>() {}.type)
+//            messages.addAll(chatHistory)
+//            adapter.notifyDataSetChanged()
+//            scrollToBottom()
+//        }
+//    }
+//
+//    private fun saveExpertChatHistory() {
+//        val expert = getSharedPreferences(expertKey, Context.MODE_PRIVATE)
+//        val editor = expert.edit()
+//
+//        val chatHistoryJson = Gson().toJson(messages)
+//        editor.putString(id, chatHistoryJson)
+//        editor.apply()
+//    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -226,6 +250,51 @@ class ExpertChatActivity : AppCompatActivity() {
         val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일 EEEE", Locale.getDefault())
         val date = Date(System.currentTimeMillis())
         return dateFormat.format(date)
+    }
+
+    private fun mobileToServers() {
+        lifecycleScope.launch {
+            try {
+                val message = InfoTeenChatData(id)
+
+                val response = viewModel.getUrl().value?.let {
+                    // Retrofit 설정을 통해 타임아웃을 조정
+                    val retrofit = InfoTeenChatApi.retrofitService(it, timeout = 180) // 타임아웃을 60초로 설정
+                    retrofit.sendMessage(message)
+                }
+
+                if (response != null) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            val responseDataList = responseBody.history
+
+                            for (responseData in responseDataList) {
+                                if (responseData.from == id) {
+                                    val teenChatDataPair = ExpertChatDataPair(responseData.sentence, responseData.date, "", "", responseData.from)
+                                    messages.add(teenChatDataPair)
+                                }
+                                else if(responseData.from != id && responseData.room == id){
+                                    val expertChatDataPair = ExpertChatDataPair("", "", responseData.sentence, responseData.date, responseData.from)
+                                    messages.add(expertChatDataPair)
+                                }
+                            }
+
+                            adapter.notifyDataSetChanged()
+                            scrollToBottom()
+
+//                            saveChatHistory()
+                        } else {
+                            Log.e("@@@@Error3", "Response body is null")
+                        }
+                    } else {
+                        Log.e("@@@@Error2", "Response not successful: ${response.code()}")
+                    }
+                }
+            } catch (Ex: Exception) {
+                Log.e("@@@@Error1", Ex.stackTraceToString())
+            }
+        }
     }
 
     data class SocketData(val message: String?, val room: String, val senderID: String)

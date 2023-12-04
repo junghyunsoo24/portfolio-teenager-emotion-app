@@ -71,7 +71,7 @@
             android:name=".ExpertChatActivity"
             android:exported="false"
             android:parentActivityName=".SelectActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+            android:windowSoftInputMode="adjustPan"/>
 
     </application>
 

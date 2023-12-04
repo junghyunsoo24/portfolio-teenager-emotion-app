@@ -323,7 +323,4 @@ class ChatBotActivity : AppCompatActivity() {
 
         return nextDayDate.format(formatter)
     }
-
 }
-
-

@@ -44,10 +44,7 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
                     Locale.getDefault()
                 ).parse(chatBotDataPair.chatBotMessageTime)
             } catch (e: ParseException) {
-                SimpleDateFormat(
-                    "yyyy-MM-dd'T'HH:mm:ss",
-                    Locale.getDefault()
-                ).parse(chatBotDataPair.chatBotMessageTime)
+                convertToKoreanTime(chatBotDataPair.chatBotMessageTime)
             }
             val chatBotSdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
             return if (bot != null) {
@@ -67,10 +64,7 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
                     Locale.getDefault()
                 ).parse(chatBotDataPair.teenMessageTime)
             } catch (e: ParseException) {
-                SimpleDateFormat(
-                    "yyyy-MM-dd'T'HH:mm:ss",
-                    Locale.getDefault()
-                ).parse(chatBotDataPair.teenMessageTime)
+                convertToKoreanTime(chatBotDataPair.teenMessageTime)
             }
             val teenSdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
             return if (teen != null) {
