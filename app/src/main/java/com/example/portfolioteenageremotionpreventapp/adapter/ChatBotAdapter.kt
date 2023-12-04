@@ -36,7 +36,7 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
         return MessageViewHolder(itemView)
     }
 
-    private fun getFormattedDate(chatBotDataPair: ChatBotDataPair): String? {
+    private fun checkChatBotDate(chatBotDataPair: ChatBotDataPair): String? {
         if(chatBotDataPair.chatBotMessage !="") {
             val bot = try {
                 SimpleDateFormat(
@@ -57,6 +57,29 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
             }
         }
             return ""
+    }
+
+    private fun checkTeenDate(chatBotDataPair: ChatBotDataPair): String? {
+        if(chatBotDataPair.teenMessage !="") {
+            val teen = try {
+                SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss",
+                    Locale.getDefault()
+                ).parse(chatBotDataPair.teenMessageTime)
+            } catch (e: ParseException) {
+                SimpleDateFormat(
+                    "yyyy-MM-dd'T'HH:mm:ss",
+                    Locale.getDefault()
+                ).parse(chatBotDataPair.teenMessageTime)
+            }
+            val teenSdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
+            return if (teen != null) {
+                teenSdf.format(teen)
+            } else {
+                null
+            }
+        }
+        return ""
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -128,7 +151,12 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
             null
         }
 
-        if (position == 0 || getFormattedDate(chatBotData[position - 1]) != botDate && getFormattedDate(chatBotData[position - 1]) != "") {
+//        if(position == 0 && messagePair.teenMessage.isEmpty() && messagePair.teenMessageTime.isEmpty() && messagePair.chatBotMessage.isEmpty() && messagePair.chatBotMessageTime.isEmpty()){
+//            holder.dateTextView.text = teenDate
+//            return
+//        }
+
+        if (position == 0 || checkChatBotDate(chatBotData[position - 1]) != botDate  && checkChatBotDate(chatBotData[position - 1]) != "") {
             holder.dateTextView.text = botDate
         } else {
             holder.dateTextView.text = null
@@ -146,11 +174,19 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
 
             if (messagePair.teenMessage.isNotEmpty() && messagePair.teenMessageTime.isNotEmpty() && messagePair.chatBotMessage.isEmpty() && messagePair.chatBotMessageTime.isEmpty()) {
                 holder.inputMessageTextView.text = messagePair.teenMessage
-                holder.inputTimeView.text = botTime
+                holder.inputTimeView.text = teenTime
+                if(position == 0 || checkTeenDate(chatBotData[position - 1]) != teenDate && checkTeenDate(chatBotData[position - 1]) != "") {
+                    holder.dateTextView.text = teenDate
+                }
             }
             if (messagePair.teenMessage.isEmpty() && messagePair.teenMessageTime.isEmpty() && messagePair.chatBotMessage.isNotEmpty() && messagePair.chatBotMessageTime.isNotEmpty()) {
                 holder.responseMessageTextView.text = messagePair.chatBotMessage
                 holder.outputTimeView.text = botTime
+//                if(checkChatBotDate(chatBotData[position - 1]) != botDate) {
+//                    if(botDate != "") {
+//                        holder.dateTextView.text = botDate
+//                    }
+//                }
             }
 
 
