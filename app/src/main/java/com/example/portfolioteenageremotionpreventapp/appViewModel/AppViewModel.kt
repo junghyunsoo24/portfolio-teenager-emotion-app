@@ -21,6 +21,17 @@ class AppViewModel private constructor() : ViewModel() {
 
     private val currentDate = MutableLiveData<String>()
 
+    private val cnt = MutableLiveData<Int>()
+
+    fun getCnt(): MutableLiveData<Int> {
+        return cnt
+    }
+
+    // Setter
+    fun setCnt(newCnt: Int) {
+        cnt.value = newCnt
+    }
+
     fun setJwtToken(token: String) {
         jwtTokenLiveData.value = token
     }

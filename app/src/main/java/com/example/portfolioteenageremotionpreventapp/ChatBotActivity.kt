@@ -1,15 +1,14 @@
 package com.example.portfolioteenageremotionpreventapp
 
-import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -22,10 +21,10 @@ import com.example.portfolioteenageremotionpreventapp.chatbot.ChatBotDataPair
 import com.example.portfolioteenageremotionpreventapp.databinding.ActivityChatbotBinding
 import com.example.portfolioteenageremotionpreventapp.infoChatbot.InfoChatBotApi
 import com.example.portfolioteenageremotionpreventapp.infoChatbot.InfoChatBotData
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ChatBotActivity : AppCompatActivity() {
@@ -38,11 +37,14 @@ class ChatBotActivity : AppCompatActivity() {
 
     private lateinit var viewModel: AppViewModel
 
-    private val chatBotKey = "chatBot_history"
+//    private val chatBotKey = "chatBot_history"
 
     private lateinit var currentDate: String
-    private var cnt: Int = 0
+    private lateinit var currentDateTime: LocalDateTime
+    private lateinit var formatter: DateTimeFormatter
+    private lateinit var formattedDateTime: String
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,18 +55,22 @@ class ChatBotActivity : AppCompatActivity() {
 
         id = viewModel.getUserId().value.toString()
 
-        viewModel.setCurrentDate(getCurrentDate())
+//        viewModel.setCurrentDate(getCurrentDate())
 //        binding.chatBot.text = viewModel.getCurrentDate().value
+
+        currentDateTime = LocalDateTime.now()
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        formattedDateTime = currentDateTime.format(formatter)
+
 
         adapter = ChatBotAdapter(messages)
         binding.chatBotRecyclerView.adapter = adapter
         binding.chatBotRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        if(cnt == 0) {
-            mobileToServers()
-            cnt++
-        }
 
+        val currentCnt = viewModel.getCnt().value
+
+        mobileToServers()
 
         binding.input.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -72,11 +78,11 @@ class ChatBotActivity : AppCompatActivity() {
 //                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 //                inputMethodManager.hideSoftInputFromWindow(binding.input.windowToken, 0)
                 if (teenMessage.isNotBlank()) {
-                    val chatBotDataPair = ChatBotDataPair(teenMessage, "", "","")
+                    val chatBotDataPair = ChatBotDataPair(teenMessage, formattedDateTime, "","")
                     messages.add(chatBotDataPair)
                     adapter.notifyDataSetChanged()
                     scrollToBottom()
-                    saveChatHistory()
+//                    saveChatHistory()
 
                     mobileToServer()
 
@@ -91,11 +97,11 @@ class ChatBotActivity : AppCompatActivity() {
         binding.chatDeliver.setOnClickListener {
             teenMessage = binding.input.text.toString()
             if (teenMessage.isNotBlank()) {
-                val chatBotDataPair = ChatBotDataPair(teenMessage, "", "", "")
+                val chatBotDataPair = ChatBotDataPair(teenMessage, formattedDateTime, "", "")
                 messages.add(chatBotDataPair)
                 adapter.notifyDataSetChanged()
                 scrollToBottom()
-                saveChatHistory()
+//                saveChatHistory()
 
                 mobileToServer()
 
@@ -113,7 +119,43 @@ class ChatBotActivity : AppCompatActivity() {
 
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        loadChatHistory()
+//        loadChatHistory()
+    }
+
+    private fun mobileToServer() {
+        lifecycleScope.launch {
+            try {
+                val message = ChatBotData(id, teenMessage)
+
+                val response = viewModel.getUrl().value?.let {
+                    // Retrofit 설정을 통해 타임아웃을 조정
+                    val retrofit = ChatBotApi.retrofitService(it, timeout = 180) // 타임아웃을 60초로 설정
+                    retrofit.sendMessage(message)
+                }
+
+                if (response != null) {
+                    if (response.isSuccessful) {
+                        val responseBody = response?.body()
+                        if (responseBody != null) {
+                            val responseData = responseBody.chatbot
+                            val responseDate = responseBody.chatbotPreviousDate
+
+                            val chatBotDataPair = ChatBotDataPair("", "",responseData, responseDate)
+                            messages.add(chatBotDataPair)
+                            adapter.notifyDataSetChanged()
+                            scrollToBottom()
+//                            saveChatHistory()
+                        } else {
+                            Log.e("@@@@Error3", "Response body is null")
+                        }
+                    } else {
+                        Log.e("@@@@Error2", "Response not successful: ${response.code()}")
+                    }
+                }
+            } catch (Ex: Exception) {
+                Log.e("@@@@Error1", Ex.stackTraceToString())
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -150,56 +192,15 @@ class ChatBotActivity : AppCompatActivity() {
                             val responseDataList = responseBody.history
 
                             for (responseData in responseDataList) {
-                                val chatBotDataPair = ChatBotDataPair(
-                                    responseData.teen_message,
-                                    responseData.teen_chat_date,
-                                    responseData.chatbot_message,
-                                    responseData.chatbot_chat_date
-                                )
-                                viewModel.setCurrentDate(responseData.chatbot_chat_date)
+                                val chatBotDataPair = ChatBotDataPair(responseData.teen_message, responseData.teen_chat_date, responseData.chatbot_message, responseData.chatbot_chat_date)
                                 messages.add(chatBotDataPair)
                             }
 
-
                             adapter.notifyDataSetChanged()
                             scrollToBottom()
+
+
 //                            saveChatHistory()
-                        } else {
-                            Log.e("@@@@Error3", "Response body is null")
-                        }
-                    } else {
-                        Log.e("@@@@Error2", "Response not successful: ${response.code()}")
-                    }
-                }
-            } catch (Ex: Exception) {
-                Log.e("@@@@Error1", Ex.stackTraceToString())
-            }
-        }
-    }
-
-    private fun mobileToServer() {
-        lifecycleScope.launch {
-            try {
-                val message = ChatBotData(id, teenMessage)
-
-                val response = viewModel.getUrl().value?.let {
-                    // Retrofit 설정을 통해 타임아웃을 조정
-                    val retrofit = ChatBotApi.retrofitService(it, timeout = 180) // 타임아웃을 60초로 설정
-                    retrofit.sendMessage(message)
-                }
-
-                if (response != null) {
-                    if (response.isSuccessful) {
-                        val responseBody = response?.body()
-                        if (responseBody != null) {
-                            val responseData = responseBody.chatbot
-                            val responseDate = responseBody.chatbotPreviousDate
-
-                            val chatBotDataPair = ChatBotDataPair("", "",responseData, responseDate)
-                            messages.add(chatBotDataPair)
-                            adapter.notifyDataSetChanged()
-                            scrollToBottom()
-                            saveChatHistory()
                         } else {
                             Log.e("@@@@Error3", "Response body is null")
                         }
@@ -220,30 +221,29 @@ class ChatBotActivity : AppCompatActivity() {
     }
 
 
-
-    private fun loadChatHistory() {
-        val chatBot = getSharedPreferences(chatBotKey, Context.MODE_PRIVATE)
-        val chatHistoryJson = chatBot.getString(id, "")
-
-        if (!chatHistoryJson.isNullOrEmpty()) {
-            val chatHistory = Gson().fromJson<List<ChatBotDataPair>>(
-                chatHistoryJson,
-                object : TypeToken<List<ChatBotDataPair>>() {}.type
-            )
-            messages.addAll(chatHistory)
-            adapter.notifyDataSetChanged()
-            scrollToBottom()
-        }
-    }
-
-    private fun saveChatHistory() {
-        val chatBot = getSharedPreferences(chatBotKey, Context.MODE_PRIVATE)
-        val editor = chatBot.edit()
-
-        val chatHistoryJson = Gson().toJson(messages)
-        editor.putString(id, chatHistoryJson)
-        editor.apply()
-    }
+//    private fun loadChatHistory() {
+//        val chatBot = getSharedPreferences(chatBotKey, Context.MODE_PRIVATE)
+//        val chatHistoryJson = chatBot.getString(id, "")
+//
+//        if (!chatHistoryJson.isNullOrEmpty()) {
+//            val chatHistory = Gson().fromJson<List<ChatBotDataPair>>(
+//                chatHistoryJson,
+//                object : TypeToken<List<ChatBotDataPair>>() {}.type
+//            )
+//            messages.addAll(chatHistory)
+//            adapter.notifyDataSetChanged()
+//            scrollToBottom()
+//        }
+//    }
+//
+//    private fun saveChatHistory() {
+//        val chatBot = getSharedPreferences(chatBotKey, Context.MODE_PRIVATE)
+//        val editor = chatBot.edit()
+//
+//        val chatHistoryJson = Gson().toJson(messages)
+//        editor.putString(id, chatHistoryJson)
+//        editor.apply()
+//    }
 
     private fun getCurrentDate(): String {
         val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일 EEEE", Locale.getDefault())
@@ -251,3 +251,5 @@ class ChatBotActivity : AppCompatActivity() {
         return dateFormat.format(date)
     }
 }
+
+

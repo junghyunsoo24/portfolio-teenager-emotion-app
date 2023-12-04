@@ -1,21 +1,21 @@
 package com.example.portfolioteenageremotionpreventapp.adapter
 
-import android.util.Log
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.portfolioteenageremotionpreventapp.R
 import com.example.portfolioteenageremotionpreventapp.appViewModel.AppViewModel
 import com.example.portfolioteenageremotionpreventapp.chatbot.ChatBotDataPair
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerView.Adapter<ChatBotAdapter.MessageViewHolder>() {
     private lateinit var viewModel: AppViewModel
-    private var lastDate: String? = null
+
     class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val inputMessageTextView: TextView = itemView.findViewById(R.id.inputChatTextView)
         val responseMessageTextView: TextView = itemView.findViewById(R.id.responseChatTextView)
@@ -33,6 +33,17 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
         return MessageViewHolder(itemView)
     }
 
+    private fun getFormattedDate(chatBotDataPair: ChatBotDataPair): String? {
+        val bot = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(chatBotDataPair.chatBotMessageTime)
+        val chatBotSdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
+        return if (bot != null) {
+            chatBotSdf.format(bot)
+        } else {
+            null
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         viewModel = AppViewModel.getInstance()
 
@@ -44,95 +55,36 @@ class ChatBotAdapter(private val chatBotData: List<ChatBotDataPair>) : RecyclerV
         holder.inputTimeView.textSize = 10f
         holder.outputTimeView.textSize = 10f
 
-        if (messagePair.teenMessage.isNullOrEmpty()) {
-            holder.inputMessageTextView.visibility = View.GONE
-            holder.inputTimeView.visibility = View.GONE
-            holder.dateTextView.visibility = View.GONE
-        } else {
-            holder.inputMessageTextView.text = messagePair.teenMessage
-
-            holder.inputMessageTextView.visibility = View.VISIBLE
-            holder.inputTimeView.visibility = View.VISIBLE
+        var bot: Date? = null
+        if (messagePair.chatBotMessageTime.isNotEmpty()) {
+            bot = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(messagePair.chatBotMessageTime)
         }
-
-        if (messagePair.chatBotMessage.isNullOrEmpty()) {
-            holder.responseMessageTextView.visibility = View.GONE
-            holder.outputTimeView.visibility = View.GONE
-            holder.dateTextView.visibility = View.GONE
-        } else {
-            holder.responseMessageTextView.text = messagePair.chatBotMessage
-
-            holder.responseMessageTextView.visibility = View.VISIBLE
-            holder.outputTimeView.visibility = View.VISIBLE
-            holder.dateTextView.visibility = View.VISIBLE
-        }
-
-//        val currentDate = Calendar.getInstance().time
-//
-//        val sdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
-//        val formattedDate = sdf.format(currentDate)
-//
-//        val sdfs = SimpleDateFormat("a hh:mm", Locale.getDefault())
-//        val formattedDates = sdfs.format(currentDate)
-
-        var chatBotDate: Date? = null
-
-//        if (messagePair.chatBotMessageTime != null) {
-//            try {
-//                // Try parsing using the first date format
-//                chatBotDate = SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.US)
-//                    .parse(messagePair.chatBotMessageTime)
-//            } catch (e: ParseException) {
-//                // If parsing fails, try the second date format
-//                try {
-//                    chatBotDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-//                        .parse(messagePair.chatBotMessageTime)
-//                } catch (ex: ParseException) {
-//                    ex.printStackTrace()
-//                    // Handle the case when both parsing attempts fail
-//                }
-//            }
-//        }
-
-        if (!messagePair.chatBotMessageTime.isNullOrEmpty()) {
-            chatBotDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).parse(messagePair.chatBotMessageTime)
-        }
-
         val chatBotSdf = SimpleDateFormat("yyyy년 M월 d일 (EEEE)", Locale.getDefault())
-        val chatBotFormattedDate: String? = if (chatBotDate != null) {
-            chatBotSdf.format(chatBotDate)
+        val botDate: String? = if (bot != null) {
+            chatBotSdf.format(bot)
         } else {
             null
         }
-
         val chatBotTimeSdf = SimpleDateFormat("a hh:mm", Locale.getDefault())
-        val chatBotFormattedDates: String? = if (chatBotDate != null) {
-            chatBotTimeSdf.format(chatBotDate)
+        val botTime: String? = if (bot != null) {
+            chatBotTimeSdf.format(bot)
         } else {
             null
         }
 
-        if(chatBotData.isEmpty()){
-            holder.dateTextView.text = chatBotFormattedDate
-            lastDate = chatBotFormattedDate
+        if (position == 0 || getFormattedDate(chatBotData[position - 1]) != botDate) {
+            holder.dateTextView.text = botDate
+        } else {
+            holder.dateTextView.text = null
         }
 
-
-        if (chatBotDate != null) {
-            if (messagePair.teenMessage.isNotEmpty() && messagePair.teenMessage.isNotEmpty() && messagePair.chatBotMessage.isNotEmpty() && messagePair.chatBotMessageTime.isNotEmpty()) {
-                if (chatBotDate != null) {
-                        holder.inputMessageTextView.text = messagePair.teenMessage
-                        holder.responseMessageTextView.text = messagePair.chatBotMessage
-                        holder.inputTimeView.text = chatBotFormattedDates
-                        holder.outputTimeView.text = chatBotFormattedDates
-
-                        // 날짜가 변경되었을 때만 표시
-                        if (chatBotFormattedDate != lastDate) {
-                            holder.dateTextView.text = chatBotFormattedDate
-                            lastDate = chatBotFormattedDate
-                        } else {
-                            holder.dateTextView.visibility = View.GONE
-                        }
+        if (chatBotData != null) {
+            if (messagePair.teenMessage.isNotEmpty() && messagePair.teenMessageTime.isNotEmpty() && messagePair.chatBotMessage.isNotEmpty() && messagePair.chatBotMessageTime.isNotEmpty()) {
+                if (bot != null) {
+                    holder.inputMessageTextView.text = messagePair.teenMessage
+                    holder.responseMessageTextView.text = messagePair.chatBotMessage
+                    holder.inputTimeView.text = botTime
+                    holder.outputTimeView.text = botTime
                 }
             }
         }
