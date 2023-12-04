@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
@@ -21,8 +22,10 @@ import com.example.portfolioteenageremotionpreventapp.chatbot.ChatBotDataPair
 import com.example.portfolioteenageremotionpreventapp.databinding.ActivityChatbotBinding
 import com.example.portfolioteenageremotionpreventapp.infoChatbot.InfoChatBotApi
 import com.example.portfolioteenageremotionpreventapp.infoChatbot.InfoChatBotData
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -39,10 +42,13 @@ class ChatBotActivity : AppCompatActivity() {
 
 //    private val chatBotKey = "chatBot_history"
 
-    private lateinit var currentDate: String
+//    private lateinit var currentDate: String
     private lateinit var currentDateTime: LocalDateTime
     private lateinit var formatter: DateTimeFormatter
     private lateinit var formattedDateTime: String
+
+    private lateinit var startDate: String
+    private lateinit var endDate: String
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,7 +125,54 @@ class ChatBotActivity : AppCompatActivity() {
 
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
+        startDate = getLastWeekDate()
+        endDate = getNextDayDate()
+
+        val showCalendarButton: Button = findViewById(R.id.showCalendarButton)
+        showCalendarButton.setOnClickListener {
+            showCalendar()
+        }
+
 //        loadChatHistory()
+    }
+
+    private fun showCalendar() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        val picker = builder.build()
+
+        picker.addOnPositiveButtonClickListener { selection ->
+            val startDateMillis = selection.first
+            val endDateMillis = selection.second
+
+            val startsDate = Date(startDateMillis)
+            val endsDate = Date(endDateMillis)
+
+            // Calendar 인스턴스 생성 및 시작 날짜 설정
+            val startCalendar = Calendar.getInstance()
+            startCalendar.time = startsDate
+
+//            // 시작 날짜에 1일을 더함
+//            startCalendar.add(Calendar.DAY_OF_MONTH, 1)
+
+            // 종료 날짜에 1일을 더함
+            val endCalendar = Calendar.getInstance()
+            endCalendar.time = endsDate
+            endCalendar.add(Calendar.DAY_OF_MONTH, 1)
+
+            // 더한 날짜를 SimpleDateFormat을 사용하여 문자열로 변환
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            startDate = dateFormat.format(startCalendar.time)
+            endDate = dateFormat.format(endCalendar.time)
+
+//            mobileToServeres()
+        }
+
+        // 취소 버튼 클릭 리스너 설정
+        picker.addOnNegativeButtonClickListener {
+            // 캘린더 선택이 취소될 때의 동작 처리
+        }
+
+        picker.show(supportFragmentManager, picker.toString())
     }
 
     private fun mobileToServer() {
@@ -250,6 +303,27 @@ class ChatBotActivity : AppCompatActivity() {
         val date = Date(System.currentTimeMillis())
         return dateFormat.format(date)
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getLastWeekDate(): String {
+        val currentDate = LocalDate.now()
+        val lastWeekDate = currentDate.minusWeeks(1)
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
+
+        return lastWeekDate.format(formatter)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getNextDayDate(): String {
+        val currentDate = LocalDate.now()
+        val nextDayDate = currentDate.plusDays(1)
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
+
+        return nextDayDate.format(formatter)
+    }
+
 }
 
 
