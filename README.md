@@ -32,40 +32,31 @@
 ## 2. 시스템 구조
 ![project](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/75d01731-0d93-409c-b7a4-e44922f3af33)
 
-## 3. 구현기술
-### 3.1 안드로이드 
-1. Kotlin을 이용해 안드로이드 Native 앱 개발 
-2. Socket.IO를 이용하여 실시간 양방향 채팅할 수 있도록 구현
-3. 데이터가 공유될 수 있도록 ViewModel 아키텍처 컴포넌트 이용
-4. UI 업데이트 간소화 및 일관성 유지를 위해서 DataBinding 이용
-5. 그래프를 활용할 수 있도록 MPAndroidChart 라이브러리 이용
-### 3.2 챗봇 모델
-1. openAI의 GPT-4 챗봇 모델 사용
-2. QnA의 형태가 아닌 감정적이거나 일상적인 대화를 할 수 있도록 AI Hub
-데이터 셋을 통한 학습
-3. 사전 프롬프트 작업을 통해 공감 잘하는 챗봇으로 학습
-### 3.3 감정 분석 모델
-1. RNN, LSTM, GRU, Bi-LSTM 등의 신경망들로 텍스트 다중 분류 모델을 개발하여 성능을 비교하고 가장 나은 학습 신경망 모델을 사용
-### 3.4 백엔드
-API 서버(클라이언트와 통신하는 서버), 챗봇 서버(사용자 문장에 대한 답변 API 호출 서버), 
-감정 분석 서버(청소년 문장의 감정 분석), 채팅 서버(청소년과 전문가 간 채팅) 개발
-1) API 서버
-   (1) NestJS 프레임워크를 사용
-   (2) 클라이언트와 통신하기 위한 엔드포인트를 제공
-   (3) 사용자 정보와 관련된 내용에 대해 데이터베이스에 접근   
-2) 챗봇 서버, 감정 분석 서버
-   Flask 프레임워크를 사용
-3) 채팅 서버
-   Socket.io와 Redis를 활용해 전문가와 청소년 간 실시간 양방향 채팅 구현
-### 3.5 배포
-#### 1) 서버구축
-  Nginx를 이용한 80번 포트를 사용하는 Http 서비스 구성
-  Nginx를 활용한 API 서버 및 채팅 서버 간의 리버스 프록시 설정
-#### 2) 도커를 활용한 가용성 및 배포
-  Docker를 사용하여 각 서버 역할을 하는 컨테이너로 패키징
-### 3.6 데이터베이스
-#### 1) AWS RDS 활용
-  AWS RDS를 이용하여 데이터베이스를 외부로 분리하여 안정적인 접근 및 확장성을 확보하고 데이터 일관성과 안정성을 유지
+## 3. 내가 맡은 구현기술
+### 안드로이드 앱 개발
+1) 개발 도구: Android Studio
+2) 개발 언어: Kotlin
+3) 주요 라이브러리
+* JSON 데이터 처리: GSON, Moshi 
+* HTTP 클라이언트: Retrofit2, OkHttp3 
+* 실시간 통신: Socket.IO
+* 이미지 로딩 및 캐싱: Glide 
+* 생명주기 관리: Andoroid Architecture Components-Lifecycle 
+* 앱 개발 간소화: JetBrains Anko 
+* 그래프 차트: MPAndoroidChart
+* 디자인 컴포넌트: Material Components for Android
+4) 주요 기능
+  
+(1) 청소년 앱
+* HTTP 통신을 통한 AI 챗봇 채팅 UI 설계 및 구현
+* Socket.IO를 통한 실시간 전문가 채팅 UI 설계 및 구현
+  
+(2) 전문가/관리자 앱
+* HTTP 통신을 통한 할당된 청소년 목록 UI 설계 및 구현
+* HTTP 통신과 MPAndroidChart를 통한 청소년 감정 통계 UI 설계 및 구현
+* HTTP 통신을 통한 할당 받지 않은 청소년 목록 UI 설계 및 구현
+* HTTP 통신을 통한 승인된 전문가 목록 UI 설계 및 구현
+* 청소년-전문가 할당 UI 설계 및 구현
 
 ## 4. 모바일 화면
 * AI 챗봇과 채팅
@@ -91,5 +82,3 @@ API 서버(클라이언트와 통신하는 서버), 챗봇 서버(사용자 문�
 * 청소년-전문가 매칭
 
 ![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/aed60fad-a0fb-4c97-bdf9-d86c3f723a01)![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/262ad7ac-91a6-4732-b4e0-4e73639071c4)
-
-
