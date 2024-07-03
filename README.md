@@ -1,84 +1,123 @@
-# AI 감정분석과 챗봇을 활용한 청소년 앱
+# 블록체인 기반 의료 데이터 인증 및 AI를 활용한 노약자 맞춤형 의료 애플리케이션 
 
 ## 활동
-* 학교에서 주관하는 엔지니어링 페어 전시
+* 2024 프로보노 프로젝트 진
 * 특허출원
+
 
 ## 1. 문제 정의
 ### 1.1 문제 정의
-  정서 불안 문제를 겪고 있는 청소년들과 관련된 사건들이 최근 사회적으로 이슈가 되고 있다. 우울증 갤러리에서 활동한 청소년들이 자살하거나 성착취 당한 
- 사건들이 보도되었다. 우울증갤러리를 찾는 원래 목적은 너무 외로워서 내 얘기를 들어주고 위로해 줄 사람을 찾아간 거다. 그렇지만 외롭고 고립된 상황을 악용하는 사례들이 존재하였다. 
-  
-  한편 밀양시 보건소에서 ‘찾아가는 정신 건강 상담 서비스를 운영하였다. 이와
- 같이 우울증이나 정서 불안 환자들이 직접 찾아가지 않고, 접근성 향상을 높이기 위한 정신 건강 복지 서비스들이 시행되고 있다. 하지만 직접 찾아다니면서 들어가는 여러 시간적, 금전적 등 다양한 비용들이 존재한다.
+  1) 병원 이동 시, 환자의 효율적인 데이터 제공 필요성
+     - 현재 의료 체계에서 환자가 병원 이동 시, 환자의 데이터를 다시 제공
+     - 응급 상황에서 환자의 치료 이력과 건강 특이 상황을 신속하게 파악하는 것이 중요
 
- 정서 불안 청소년들은 이야기를 나눌 대상과 방황 속에서 올바른 길로 나아갈 수 있도록 하는 사람이 필요하다. 그리고 정신 건강 복지 관련자들은 시간과 비용이 적게 드는 불안 정서 모니터링 및 상담 서비스가 필요할 수 있다.
+
+   2) 구두로 진행되어 일관적이지 않고 부정확한 진료 상담
+      - 환자는 증상 설명 시, 환자는 잘못된 기억에 의존하여 사실이 아닌 설명 가능
+      - 환자마다 증상 표현 방법이 달라 일관적으로 환자 상태 파악하기 어려움
+      - 의료진은 이러한 이유로 환자의 상태를 정확히 파악하는데 어려움. 이로 인한 오진 가능성 존재
+
+   3) 의료 데이터 접근성 낮음
+      - 일반인들은 의료 데이터 접근성이 낮아 의료 지식을 갖추기 어려움 
+      - 환자 본인의 의료 데이터 기록(본인의 병이나, 처방 기록, 수술 이력 등) 을 하나의 시스템으로 손쉽게 조회하기 어려움
+
+  위의 세 가지 이유로 환자 데이터를 의료진에게 손쉽게 공유하고, 환자가 본인의 의료 데이터를 손쉽게 조회 및 기록하며, 의료 커뮤니티를 통해 의료 데이터 접근성을 높이는 시스템이 필요하다고 판단
+
 
 ### 1.2 목표
-#### 1) 청소년
-  친구처럼 일상 대화를 나눌 수 있는 채팅으로 긍정적인 정서를 함양한다. 
-특히 우울증을 가지고 있거나 정서적으로 불안한 청소년들에게 시간 및 공간의 
-제약에서 자유로운 AI를 통하여 대화할 수 있는 기능을 제공한다. 
-청소년이 신원이 불분명한 사람과 대화를 나누는 것이 아닌 전문가와 채팅으로 
-상담받을 수 있게 한다. 
-#### 2) 전문가
-  손쉽게 청소년들의 정서를 모니터링 할 수 있고 상담할 수 있다. 
-대면 상담에 들어가는 시간적, 금전적 등 다양한 비용을 비대면 채팅 상담을 통해 절감할 수 있다. 
-#### 3) 관리자
- 전문가들의 전문성을 확인하고 승인하여 전문가들의 승인 여부를 결정한다.
-전문가에게 적절한 청소년들을 할당하여 해당 청소년들의 감정을 전문가가 
-모니터링 할 수 있도록 한다.
+#### 1) 환자
+   -블록체인을 통해 검증된 자신의 의료 데이터 조회
+   
+   -자신의 의료 데이터를 본인의 기기에 저장
+   
+   -자신의 의료 데이터에서 필요 내용 추가 기록
+   
+   -필요한 의료진들에게 자신의 의료 데이터 공유
+   
+   -알림을 통한 효과적인 약물 복용 관리
+   
+   -게시판에서 의료진으로부터 질문 답변
+#### 2) 의료진
+   -진료 전 혹은 긴급 상황 시 환자의 의료 데이터 조회를 통해 더욱 효과적인 진단
+   
+  -환자의 의료 정보들을 본인의 데스크톱에 저장
+ 
+  -블록체인을 통해 자신이 환자에게 제공하는 의료 데이터 무결성 보장
+
+  -게시판에서 의료진으로써 답변하여 전문성 어필 
+
 
 ## 2. 시스템 구조
-![project](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/75d01731-0d93-409c-b7a4-e44922f3af33)
+![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/07d85dc9-4d0d-40ae-b013-8534f7c4afc7)
 
 ## 3. 내가 맡은 구현기술
-### 안드로이드 앱 개발
-1) 개발 도구: Android Studio
-2) 개발 언어: Kotlin
-3) 주요 라이브러리
-* JSON 데이터 처리: GSON, Moshi 
-* HTTP 클라이언트: Retrofit2, OkHttp3 
-* 실시간 통신: Socket.IO
-* 이미지 로딩 및 캐싱: Glide 
-* 생명주기 관리: Andoroid Architecture Components-Lifecycle 
-* 앱 개발 간소화: JetBrains Anko 
-* 그래프 차트: MPAndoroidChart
-* 디자인 컴포넌트: Material Components for Android
-4) 주요 기능
+### 크로스플랫폼 앱 개발
+1. 역할
+   1) 프론트엔드(Android 앱, Window 앱)
+   2) 블록체인
+
+2. 프론트 개발 환경 및 사용 기술
+   1) 개발 도구: Android Studio
+   2) 개발 언어: Dart 
+
+3. 블록체인 개발 환경 및 사용 기술
+   1) 개발 도구: Visual Studio Code
+   2) 개발 언어: Python
+   
+4. 프론트 구현 기능
+   
+    (1) FireBase FireStore를 통한 다른 플랫폼 데이터 송수신 구현
+   
+    (2) 다른 플랫폼에서 데이터 받을 시 알림 기능 및 데이터 조회 구현
+   
+    (3) 다른 플랫폼으로 데이터 전송 기능 구현
+   
+    (4) 의료 API HTTP 통신을 통해 받아올 수 있도록 구현
+   
+    (5) 회원가입, 로그인, 로그아웃 기능 구현
+
+6. 블록체인 구현 기능
+   
+    (1) 의료 데이터가 해시값으로 변환하여 블록체인에 저장할 수 있도록 구현
+
+
+## 4. UI 화면
+* 메인페이지
   
-(1) 청소년 앱
-* HTTP 통신을 통한 AI 챗봇 채팅 UI 설계 및 구현
-* Socket.IO를 통한 실시간 전문가 채팅 UI 설계 및 구현
+![스크린샷 2024-07-03 175842](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/81362a24-ed9c-463a-8865-52818c184f7c)
+
+
+* 환자->의료진 의료 데이터 전송
   
-(2) 전문가/관리자 앱
-* HTTP 통신을 통한 할당된 청소년 목록 UI 설계 및 구현
-* HTTP 통신과 MPAndroidChart를 통한 청소년 감정 통계 UI 설계 및 구현
-* HTTP 통신을 통한 할당 받지 않은 청소년 목록 UI 설계 및 구현
-* HTTP 통신을 통한 승인된 전문가 목록 UI 설계 및 구현
-* 청소년-전문가 할당 UI 설계 및 구현
+![스크린샷 2024-07-03 182709](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/b8d579f0-4d32-4ba6-97d8-10d4abaf93b8)
 
-## 4. 모바일 화면
-* AI 챗봇과 채팅
+* 의료진->환자 의료 데이터 전송
   
-![image1](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/8b26a108-1f7a-4daf-bbe3-4757867061af) ![image2](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/52561c89-7e45-4219-b786-40110788f8e5)
+![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/534bfab3-7c03-4d53-8cea-9b8d1937643f)
 
-* 청소년-전문가 채팅
+
+* 의료진의 환자로부터 받은 전송 이력
   
-![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/0094f1a7-1615-484e-ae56-31bedb22910a)![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/7d7e11db-6b8b-48ce-bb90-9cbe108864ac)
+![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/23927bd4-331e-4f4d-97b0-786083dcfa39)
 
-* 할당된 청소년 목록 조회
+
+* 환자의 의료 게시판 이용
+
+![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/7647a3b6-0372-48d8-bbfd-a889c4cd80e2)
+
+
+* 의료진의 의료 게시판 이용
+
+![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/d7cff2a3-2ff1-467d-a64a-bd30d16ff7d4)
+
+
+* 환자의 진료 전 추가 의료 데이터 등록
   
-![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/a61f2b50-32a1-4138-8963-bd8ef97ebdb7)![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/64bbcd6b-0277-4a33-9fcb-ee5f28065d00)
+![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/6c7b8beb-2c1a-42f2-8fdc-6a1691e21900)
 
-* 할당된 청소년 모니터링
+
+* 환자의 의료 API 불러오기
   
-![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/47e394de-0440-42e9-a984-de03ecdb10f0)![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/cc99807b-6297-444e-816e-54658d7603af)
+![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/644ca5ea-4816-4692-9847-779d65d40b6b)
 
-* 전문가 승인
 
-![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/2bb42ccb-5db2-435a-af2e-7b46741ca033)![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/9c0b1f0f-4270-42a3-8ac7-f47be91226c9)
-
-* 청소년-전문가 매칭
-
-![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/aed60fad-a0fb-4c97-bdf9-d86c3f723a01)![image](https://github.com/junghyunsoo24/portfolio-teenager-emotion-prevent-app-teenagers/assets/117528532/262ad7ac-91a6-4732-b4e0-4e73639071c4)
